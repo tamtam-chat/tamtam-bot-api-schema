@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>chat.tamtam</groupId>
+    <artifactId>tamtam-bot-api-schema</artifactId>
+    <version>0.0.5</version>
+
+    <name>TamTam Chat OpenAPI Schema</name>
+    <description>This is an OpenAPI schema used to build clients for TamTam Bot API.</description>
+    <url>https://dev.tamtam.chat</url>
+    <inceptionYear>2018</inceptionYear>
+    <organization>
+        <name>Mail.Ru Group</name>
+        <url>https://corp.mail.ru</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Alexander Chuprin</name>
+            <email>alexander.chuprin@corp.mail.ru</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>schema.json</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>
