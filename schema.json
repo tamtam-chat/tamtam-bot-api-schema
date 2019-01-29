@@ -1276,6 +1276,16 @@
                         "type": "integer",
                         "format": "int64"
                     },
+                    "link": {
+                        "description": "Forwarder or replied message",
+                        "nullable": true,
+                        "readOnly": false,
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LinkedMessage"
+                            }
+                        ]
+                    },
                     "message": {
                         "description": "Body of created message. Text+attachments.",
                         "allOf": [
@@ -1317,15 +1327,6 @@
                         "items": {
                             "$ref": "#/components/schemas/Attachment"
                         }
-                    },
-                    "link": {
-                        "description": "Forwarder or replied message",
-                        "nullable": true,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/LinkedMessage"
-                            }
-                        ]
                     },
                     "reply_to": {
                         "deprecated": true,
@@ -1452,17 +1453,32 @@
                             }
                         ]
                     },
+                    "sender": {
+                        "description": "User sent this message",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ]
+                    },
+                    "chat_id": {
+                        "description": "Chat where message was originally posted",
+                        "type": "integer",
+                        "format": "int64"
+                    },
                     "message": {
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/Message"
+                                "$ref": "#/components/schemas/MessageBody"
                             }
                         ]
                     }
                 },
                 "required": [
                     "type",
-                    "message"
+                    "message",
+                    "sender",
+                    "chat_id"
                 ]
             },
             "SendMessageResult": {
