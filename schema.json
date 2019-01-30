@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.1.0",
+        "version": "0.1.1",
         "title": "TamTam Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -2400,7 +2400,11 @@
                         "message_callback": "#/components/schemas/MessageCallbackUpdate",
                         "message_edited": "#/components/schemas/MessageEditedUpdate",
                         "message_removed": "#/components/schemas/MessageRemovedUpdate",
-                        "message_restored": "#/components/schemas/MessageRestoredUpdate"
+                        "message_restored": "#/components/schemas/MessageRestoredUpdate",
+                        "bot_added": "#/components/schemas/BotAddedToChatUpdate",
+                        "bot_removed": "#/components/schemas/BotRemovedFromChatUpdate",
+                        "user_added": "#/components/schemas/UserAddedToChatUpdate",
+                        "user_removed": "#/components/schemas/UserRemovedFromChatUpdate"
                     }
                 },
                 "properties": {
@@ -2520,6 +2524,122 @@
                         },
                         "required": [
                             "message_id"
+                        ]
+                    }
+                ]
+            },
+            "BotAddedToChatUpdate": {
+                "description": "You will receive this update when bot has been added to chat",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Chat id where bot was added",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User id who added bot to chat",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id"
+                        ]
+                    }
+                ]
+            },
+            "BotRemovedFromChatUpdate": {
+                "description": "You will receive this update when bot has been removed from chat",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Chat identifier bot removed from",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User id who removed bot from chat",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id"
+                        ]
+                    }
+                ]
+            },
+            "UserAddedToChatUpdate": {
+                "description": "You will receive this update when user has been added to chat where bot is administrator",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Chat identifier where event occured",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User added to chat",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "inviter_id": {
+                                "description": "User who added user to chat",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id",
+                            "inviter_id"
+                        ]
+                    }
+                ]
+            },
+            "UserRemovedFromChatUpdate": {
+                "description": "You will receive this update when user has been removed from chat where bot is administrator",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Chat identifier where event occured",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User removed from chat",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "admin_id": {
+                                "description": "Administrator who removed user from chat",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id",
+                            "admin_id"
                         ]
                     }
                 ]
