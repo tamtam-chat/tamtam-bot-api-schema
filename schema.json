@@ -2405,7 +2405,8 @@
                         "bot_added": "#/components/schemas/BotAddedToChatUpdate",
                         "bot_removed": "#/components/schemas/BotRemovedFromChatUpdate",
                         "user_added": "#/components/schemas/UserAddedToChatUpdate",
-                        "user_removed": "#/components/schemas/UserRemovedFromChatUpdate"
+                        "user_removed": "#/components/schemas/UserRemovedFromChatUpdate",
+                        "bot_started": "#/components/schemas/BotStartedUpdate"
                     }
                 },
                 "properties": {
@@ -2641,6 +2642,32 @@
                             "chat_id",
                             "user_id",
                             "admin_id"
+                        ]
+                    }
+                ]
+            },
+            "BotStartedUpdate": {
+                "description": "Bot gets this type of update as soon as user pressed `Start` button",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Dialog identifier where event occured",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User pressed the 'Start' button",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id"
                         ]
                     }
                 ]
