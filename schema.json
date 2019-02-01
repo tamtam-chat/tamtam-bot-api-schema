@@ -2406,7 +2406,8 @@
                         "bot_removed": "#/components/schemas/BotRemovedFromChatUpdate",
                         "user_added": "#/components/schemas/UserAddedToChatUpdate",
                         "user_removed": "#/components/schemas/UserRemovedFromChatUpdate",
-                        "bot_started": "#/components/schemas/BotStartedUpdate"
+                        "bot_started": "#/components/schemas/BotStartedUpdate",
+                        "chat_title_changed": "#/components/schemas/ChatTitleChangedUpdate"
                     }
                 },
                 "properties": {
@@ -2668,6 +2669,37 @@
                         "required": [
                             "chat_id",
                             "user_id"
+                        ]
+                    }
+                ]
+            },
+            "ChatTitleChangedUpdate": {
+                "description": "Bot gets this type of update as soon as title has been changed in chat",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "chat_id": {
+                                "description": "Chat identifier where event has occured",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "user_id": {
+                                "description": "User who changed title",
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "title": {
+                                "description": "New title",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "chat_id",
+                            "user_id",
+                            "title"
                         ]
                     }
                 ]
