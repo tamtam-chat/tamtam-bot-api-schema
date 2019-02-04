@@ -41,7 +41,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/User"
+                                    "$ref": "#/components/schemas/UserWithPhoto"
                                 }
                             }
                         }
@@ -709,7 +709,7 @@
                     "messages"
                 ],
                 "operationId": "editMessage",
-                "description": "Updated message should be sent as `NewMessage` in a request body. In case `attachments` field is `null`, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.",
+                "description": "Updated message should be sent as `NewMessageBody` in a request body. In case `attachments` field is `null`, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.",
                 "summary": "Edit message",
                 "parameters": [
                     {
@@ -1096,7 +1096,7 @@
                         "nullable": true,
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/PhotoAttachmentRequest"
+                                "$ref": "#/components/schemas/PhotoAttachmentRequestPayload"
                             }
                         ]
                     },
@@ -1104,47 +1104,6 @@
                         "type": "string",
                         "readOnly": false,
                         "nullable": true
-                    }
-                }
-            },
-            "ChatControl": {
-                "description": "Part of NewMessage if your want to control your chat",
-                "properties": {
-                    "title": {
-                        "description": "Fill this if you want to change chat title",
-                        "type": "string",
-                        "readOnly": false
-                    },
-                    "icon": {
-                        "description": "Fill this if you want to change chat icon",
-                        "readOnly": false,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/PhotoAttachmentRequest"
-                            }
-                        ]
-                    },
-                    "leave": {
-                        "description": "Fill this if you want to leave chat",
-                        "type": "string",
-                        "readOnly": false
-                    },
-                    "add_members": {
-                        "description": "Fill this if you want to add members to chat. Admin permissions required",
-                        "type": "array",
-                        "readOnly": false,
-                        "items": {
-                            "$ref": "#/components/schemas/ChatMember"
-                        }
-                    },
-                    "remove_member": {
-                        "description": "Fill this if you want to remove members from chat. Admin permissions required",
-                        "readOnly": false,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ChatMember"
-                            }
-                        ]
                     }
                 }
             },
@@ -1358,52 +1317,6 @@
                 },
                 "required": [
                     "messages"
-                ]
-            },
-            "NewMessage": {
-                "description": "New message. Could be `control`, `sender_action` or real `message`",
-                "properties": {
-                    "recipient": {
-                        "description": "Message recipient. User or chat",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Recipient"
-                            }
-                        ]
-                    },
-                    "sender_action": {
-                        "description": "Action to send to chat. For example: `typing` or `sending photo`. See `SenderAction` for full information",
-                        "nullable": true,
-                        "readOnly": false,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SenderAction"
-                            }
-                        ]
-                    },
-                    "chat_control": {
-                        "description": "Control message to chat. For example: to set icon or title of chat. See `ChatControl` description for full information",
-                        "nullable": true,
-                        "readOnly": false,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ChatControl"
-                            }
-                        ]
-                    },
-                    "message": {
-                        "description": "Real message to send to chat",
-                        "nullable": true,
-                        "readOnly": false,
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/NewMessageBody"
-                            }
-                        ]
-                    }
-                },
-                "required": [
-                    "recipient"
                 ]
             },
             "NewMessageBody": {
@@ -2415,7 +2328,7 @@
                         "type": "string"
                     },
                     "timestamp": {
-                        "description": "Unix-time when event occured",
+                        "description": "Unix-time when event has occured",
                         "type": "integer",
                         "format": "int64"
                     }
@@ -2592,7 +2505,7 @@
                     {
                         "properties": {
                             "chat_id": {
-                                "description": "Chat identifier where event occured",
+                                "description": "Chat identifier where event has occured",
                                 "type": "integer",
                                 "format": "int64"
                             },
@@ -2624,7 +2537,7 @@
                     {
                         "properties": {
                             "chat_id": {
-                                "description": "Chat identifier where event occured",
+                                "description": "Chat identifier where event has occured",
                                 "type": "integer",
                                 "format": "int64"
                             },
@@ -2656,7 +2569,7 @@
                     {
                         "properties": {
                             "chat_id": {
-                                "description": "Dialog identifier where event occured",
+                                "description": "Dialog identifier where event has occurred",
                                 "type": "integer",
                                 "format": "int64"
                             },
@@ -2682,7 +2595,7 @@
                     {
                         "properties": {
                             "chat_id": {
-                                "description": "Chat identifier where event has occured",
+                                "description": "Chat identifier where event has occurred",
                                 "type": "integer",
                                 "format": "int64"
                             },
