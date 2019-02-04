@@ -1062,10 +1062,11 @@
             "ChatStatus": {
                 "description": "Chat status for current bot",
                 "enum": [
-                    "ACTIVE",
-                    "REMOVED",
-                    "LEFT",
-                    "CLOSED"
+                    "active",
+                    "removed",
+                    "left",
+                    "closed",
+                    "suspended"
                 ]
             },
             "ChatList": {
