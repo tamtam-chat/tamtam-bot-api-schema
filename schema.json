@@ -1432,7 +1432,8 @@
                         "sticker": "#/components/schemas/StickerAttachment",
                         "contact": "#/components/schemas/ContactAttachment",
                         "inline_keyboard": "#/components/schemas/InlineKeyboardAttachment",
-                        "share": "#/components/schemas/ShareAttachment"
+                        "share": "#/components/schemas/ShareAttachment",
+                        "location": "#/components/schemas/LocationAttachment"
                     }
                 },
                 "properties": {
@@ -1646,6 +1647,27 @@
                     }
                 ]
             },
+            "LocationAttachment": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Attachment"
+                    },
+                    {
+                        "properties": {
+                            "latitude": {
+                                "type": "float"
+                            },
+                            "longitude": {
+                                "type": "float"
+                            }
+                        },
+                        "required": [
+                            "latitude",
+                            "longitude"
+                        ]
+                    }
+                ]
+            },
             "InlineKeyboardAttachment": {
                 "description": "Buttons in messages",
                 "allOf": [
@@ -1811,7 +1833,8 @@
                         "file": "#/components/schemas/FileAttachmentRequest",
                         "sticker": "#/components/schemas/StickerAttachmentRequest",
                         "contact": "#/components/schemas/ContactAttachmentRequest",
-                        "inline_keyboard": "#/components/schemas/InlineKeyboardAttachmentRequest"
+                        "inline_keyboard": "#/components/schemas/InlineKeyboardAttachmentRequest",
+                        "location": "#/components/schemas/LocationAttachmentRequest"
                     }
                 },
                 "properties": {
@@ -2113,6 +2136,28 @@
                 },
                 "required": [
                     "buttons"
+                ]
+            },
+            "LocationAttachmentRequest": {
+                "description": "Request to attach keyboard to message",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AttachmentRequest"
+                    },
+                    {
+                        "properties": {
+                            "latitude": {
+                                "type": "float"
+                            },
+                            "longitude": {
+                                "type": "float"
+                            }
+                        },
+                        "required": [
+                            "latitude",
+                            "longitude"
+                        ]
+                    }
                 ]
             },
             "SubscriptionRequestBody": {
