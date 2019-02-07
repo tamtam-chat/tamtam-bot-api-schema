@@ -1654,10 +1654,12 @@
                     {
                         "properties": {
                             "latitude": {
-                                "type": "float"
+                                "type": "number",
+                                "format": "double"
                             },
                             "longitude": {
-                                "type": "float"
+                                "type": "number",
+                                "format": "double"
                             }
                         },
                         "required": [
@@ -2146,10 +2148,12 @@
                     {
                         "properties": {
                             "latitude": {
-                                "type": "float"
+                                "type": "number",
+                                "format": "double"
                             },
                             "longitude": {
-                                "type": "float"
+                                "type": "number",
+                                "format": "double"
                             }
                         },
                         "required": [
