@@ -1248,7 +1248,6 @@
                     },
                     "message": {
                         "description": "Body of created message. Text + attachments. Could be null if message contains only forwarded message.",
-                        "nullable": true,
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/MessageBody"
