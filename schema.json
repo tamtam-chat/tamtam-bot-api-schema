@@ -993,7 +993,7 @@
                         ]
                     },
                     "status": {
-                        "description": "Status of chat. One of: ACTIVE, REMOVED, LEFT of CLOSED",
+                        "description": "Chat status. One of:\n - active: bot is active member of chat\n - removed: bot was kicked\n - left: bot intentionally left chat\n - closed: chat was closed",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ChatStatus"
