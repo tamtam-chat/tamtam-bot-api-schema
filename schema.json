@@ -1802,6 +1802,12 @@
                     },
                     {
                         "properties": {
+                            "quick": {
+                                "description": "If *true*, sends location without asking user's confirmation",
+                                "readOnly": false,
+                                "type": "boolean",
+                                "default": false
+                            }
                         }
                     }
                 ]
