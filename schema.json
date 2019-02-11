@@ -1186,7 +1186,7 @@
                 "description": "New message recepient. Could be user or chat",
                 "properties": {
                     "chat_id": {
-                        "description": "User identifier",
+                        "description": "Chat identifier",
                         "type": "integer",
                         "format": "int64",
                         "nullable": true
@@ -1200,7 +1200,7 @@
                         ]
                     },
                     "user_id": {
-                        "description": "Chat identifier",
+                        "description": "User identifier, if message was sent to user",
                         "type": "integer",
                         "format": "int64",
                         "nullable": true
