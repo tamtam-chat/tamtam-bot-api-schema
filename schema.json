@@ -718,7 +718,8 @@
                         "required": true,
                         "in": "query",
                         "schema": {
-                            "$ref": "#/components/schemas/bigint"
+                            "type": "string",
+                            "pattern": "mid\\.[a-z0-9]{32}"
                         }
                     }
                 ],
