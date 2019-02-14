@@ -1040,6 +1040,20 @@
                             "type": "integer",
                             "format": "int64"
                         }
+                    },
+                    "is_public": {
+                        "description": "Is current chat publicly available. Always `false` for dialogs",
+                        "type": "boolean"
+                    },
+                    "link": {
+                        "description": "Link on chat if it is public",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": true
+                    },
+                    "description": {
+                        "description": "Chat description",
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -1049,7 +1063,9 @@
                     "title",
                     "last_event_time",
                     "participants_count",
-                    "icon"
+                    "icon",
+                    "is_public",
+                    "description"
                 ]
             },
             "ChatType": {
