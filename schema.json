@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.1.1",
+        "version": "0.1.2",
         "title": "TamTam Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -245,13 +245,58 @@
             }
         },
         "/chats/{chatId}/members/me": {
+            "get": {
+                "tags": [
+                    "chats"
+                ],
+                "operationId": "getMembership",
+                "summary": "Get chat membership",
+                "description": "Returns chat membership info for current bot",
+                "parameters": [
+                    {
+                        "name": "chatId",
+                        "description": "Chat identifier",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "pattern": "\\-?\\d+"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Current bot membership info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChatMember"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "chats"
                 ],
                 "operationId": "leaveChat",
                 "summary": "Leave chat",
-                "description": "Removes bot from chat members",
+                "description": "Removes bot from chat members.",
                 "parameters": [
                     {
                         "name": "chatId",
@@ -1138,14 +1183,44 @@
                             },
                             "is_owner": {
                                 "type": "boolean"
+                            },
+                            "join_time": {
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "permissions": {
+                                "description": "Permissions in chat if member is admin. `null` otherwise",
+                                "type": "array",
+                                "uniqueItems": true,
+                                "nullable": true,
+                                "items": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ChatAdminPermission"
+                                        }
+                                    ]
+                                }
                             }
                         },
                         "required": [
                             "last_access_time",
                             "is_owner",
-                            "is_admin"
+                            "permissions",
+                            "join_time"
                         ]
                     }
+                ]
+            },
+            "ChatAdminPermission": {
+                "description": "Chat admin permissions",
+                "type": "string",
+                "enum": [
+                    "read_all_messages",
+                    "add_remove_members",
+                    "add_admins",
+                    "change_chat_info",
+                    "pin_message",
+                    "write"
                 ]
             },
             "ChatMembersList": {
