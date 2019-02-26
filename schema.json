@@ -875,6 +875,19 @@
                             "format": "int64",
                             "nullable": true
                         }
+                    },
+                    {
+                        "name": "types",
+                        "description": "Update types your bot want to receive.",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "string"
+                            },
+                            "nullable": true
+                        }
                     }
                 ],
                 "responses": {
@@ -1267,11 +1280,23 @@
                         "description": "Unix-time when subscription was created",
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "update_types": {
+                        "description": "Update types bot subscribed for",
+                        "example": "[\"message_created\", \"bot_started\"]",
+                        "type": "array",
+                        "nullable": true,
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string",
+                            "minLength": 1
+                        }
                     }
                 },
                 "required": [
                     "url",
-                    "time"
+                    "time",
+                    "update_types"
                 ]
             },
             "Recipient": {
@@ -2268,8 +2293,14 @@
                         "description": "URL of HTTP(S)-endpoint of your bot",
                         "type": "string"
                     },
-                    "filter": {
-                        "type": "string",
+                    "update_types": {
+                        "description": "List of update types your bot want to receive. See `Update` object for a complete list of types",
+                        "example": "[\"message_created\", \"bot_started\"]",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
                         "readOnly": false
                     }
                 },
