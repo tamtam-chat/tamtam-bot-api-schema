@@ -249,6 +249,7 @@
                 "tags": [
                     "chats"
                 ],
+                "x-opGroup": "myMemberhip",
                 "operationId": "getMembership",
                 "summary": "Get chat membership",
                 "description": "Returns chat membership info for current bot",
@@ -295,6 +296,7 @@
                     "chats"
                 ],
                 "operationId": "leaveChat",
+                "x-opGroup": "myMemberhip",
                 "summary": "Leave chat",
                 "description": "Removes bot from chat members.",
                 "parameters": [
