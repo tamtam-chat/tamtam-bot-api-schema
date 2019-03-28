@@ -1291,7 +1291,7 @@
                 "properties": {
                     "members": {
                         "description": "Participants in chat with time of last activity. Visible only for chat admins",
-                        "type": "object",
+                        "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/ChatMember"
                         }
