@@ -2628,67 +2628,6 @@
                     }
                 ]
             },
-            "MessageRemovedUpdate": {
-                "description": "You will get this `update` as soon as message is removed",
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/Update"
-                    },
-                    {
-                        "properties": {
-                            "message_id": {
-                                "description": "Identifier of removed message",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "message_id"
-                        ]
-                    }
-                ]
-            },
-            "MessageEditedUpdate": {
-                "description": "You will get this `update` as soon as message is edited",
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/Update"
-                    },
-                    {
-                        "properties": {
-                            "message": {
-                                "description": "Edited message",
-                                "allOf": [
-                                    {
-                                        "$ref": "#/components/schemas/Message"
-                                    }
-                                ]
-                            }
-                        },
-                        "required": [
-                            "message"
-                        ]
-                    }
-                ]
-            },
-            "MessageRestoredUpdate": {
-                "description": "You will get this `update` as soon as message is restored",
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/Update"
-                    },
-                    {
-                        "properties": {
-                            "message_id": {
-                                "description": "Restored message identifier",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "message_id"
-                        ]
-                    }
-                ]
-            },
             "BotAddedToChatUpdate": {
                 "description": "You will receive this update when bot has been added to chat",
                 "allOf": [
