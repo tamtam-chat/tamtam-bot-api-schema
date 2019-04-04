@@ -1069,11 +1069,13 @@
                         "properties": {
                             "avatar_url": {
                                 "description": "URL of avatar",
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                             },
                             "full_avatar_url": {
                                 "description": "URL of avatar of a bigger size",
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                             }
                         },
                         "required": [
@@ -1107,8 +1109,9 @@
                         ]
                     },
                     "title": {
-                        "description": "Visible title of chat",
-                        "type": "string"
+                        "description": "Visible title of chat. Can be null for dialogs",
+                        "type": "string",
+                        "nullable": true
                     },
                     "icon": {
                         "description": "Icon of chat",
