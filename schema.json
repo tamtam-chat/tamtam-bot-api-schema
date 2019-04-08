@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.1.3",
+        "version": "0.1.4",
         "title": "TamTam Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -349,6 +349,21 @@
                             "type": "integer",
                             "format": "int64",
                             "pattern": "\\-?\\d+"
+                        }
+                    },
+                    {
+                        "name": "user_ids",
+                        "description": "User identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored.",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "integer",
+                                "format": "int64"
+                            },
+                            "nullable": true
                         }
                     },
                     {
@@ -2539,6 +2554,8 @@
                     "mapping": {
                         "message_created": "#/components/schemas/MessageCreatedUpdate",
                         "message_callback": "#/components/schemas/MessageCallbackUpdate",
+                        "message_edited": "#/components/schemas/MessageEditedUpdate",
+                        "message_removed": "#/components/schemas/MessageRemovedUpdate",
                         "bot_added": "#/components/schemas/BotAddedToChatUpdate",
                         "bot_removed": "#/components/schemas/BotRemovedFromChatUpdate",
                         "user_added": "#/components/schemas/UserAddedToChatUpdate",
@@ -2604,6 +2621,48 @@
                         "properties": {
                             "message": {
                                 "description": "Newly created message",
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Message"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ]
+                    }
+                ]
+            },
+            "MessageRemovedUpdate": {
+                "description": "You will get this `update` as soon as message is removed",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "message_id": {
+                                "description": "Identifier of removed message",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "message_id"
+                        ]
+                    }
+                ]
+            },
+            "MessageEditedUpdate": {
+                "description": "You will get this `update` as soon as message is edited",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Update"
+                    },
+                    {
+                        "properties": {
+                            "message": {
+                                "description": "Edited message",
                                 "allOf": [
                                     {
                                         "$ref": "#/components/schemas/Message"
