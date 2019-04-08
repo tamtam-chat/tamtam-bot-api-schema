@@ -353,7 +353,7 @@
                     },
                     {
                         "name": "user_ids",
-                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nUser identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored.",
+                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nComma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored.",
                         "required": false,
                         "in": "query",
                         "schema": {
