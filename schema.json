@@ -852,6 +852,40 @@
                         "$ref": "#/components/responses/Forbidden"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "messages"
+                ],
+                "operationId": "deleteMessage",
+                "summary": "Delete message",
+                "description": "Deletes message in a dialog or in a chat if bot has permission to delete messages.",
+                "parameters": [
+                    {
+                        "name": "message_id",
+                        "description": "Deleting message identifier",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "mid\\.[a-z0-9]{32}"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessResponse"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    }
+                }
             }
         },
         "/answers": {
@@ -935,6 +969,19 @@
                         "schema": {
                             "type": "integer",
                             "format": "int64",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "types",
+                        "description": "Update types your bot want to receive.",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "items": {
+                                "type": "string"
+                            },
                             "nullable": true
                         }
                     },
