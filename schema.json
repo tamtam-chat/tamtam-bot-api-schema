@@ -1518,6 +1518,17 @@
                         "type": "string",
                         "nullable": true
                     },
+                    "attachment": {
+                        "description": "Single message attachment.",
+                        "type": "object",
+                        "nullable": true,
+                        "readOnly": false,
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AttachmentRequest"
+                            }
+                        ]
+                    },
                     "attachments": {
                         "description": "Message attachments. See `AttachmentRequest` and it's inheritors for full information.",
                         "type": "array",
