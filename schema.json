@@ -1618,7 +1618,10 @@
                     "type": {
                         "type": "string"
                     }
-                }
+                },
+                "required": [
+                    "type"
+                ]
             },
             "PhotoAttachment": {
                 "description": "Image attachment",
@@ -1928,6 +1931,7 @@
                     }
                 },
                 "required": [
+                    "type",
                     "text",
                     "intent"
                 ]
@@ -2032,7 +2036,10 @@
                     "type": {
                         "type": "string"
                     }
-                }
+                },
+                "required": [
+                    "type"
+                ]
             },
             "PhotoAttachmentRequest": {
                 "allOf": [
@@ -2587,6 +2594,7 @@
                     }
                 },
                 "required": [
+                    "update_type",
                     "timestamp"
                 ]
             },
