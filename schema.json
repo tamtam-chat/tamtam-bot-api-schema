@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.1.4",
+        "version": "0.1.5",
         "title": "TamTam Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -1680,7 +1680,7 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/AttachmentPayload"
+                                        "$ref": "#/components/schemas/MediaAttachmentPayload"
                                     }
                                 ]
                             }
@@ -1702,7 +1702,7 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/AttachmentPayload"
+                                        "$ref": "#/components/schemas/MediaAttachmentPayload"
                                     }
                                 ]
                             }
@@ -1724,7 +1724,7 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/AttachmentPayload"
+                                        "$ref": "#/components/schemas/FileAttachmentPayload"
                                     }
                                 ]
                             }
@@ -1744,6 +1744,44 @@
                 },
                 "required": [
                     "url"
+                ]
+            },
+            "MediaAttachmentPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AttachmentPayload"
+                    },
+                    {
+                        "properties": {
+                            "id": {
+                                "description": "Identifier of media attachment",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "id"
+                        ]
+                    }
+                ]
+            },
+            "FileAttachmentPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AttachmentPayload"
+                    },
+                    {
+                        "properties": {
+                            "fileId": {
+                                "description": "Identifier of uploaded file",
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        },
+                        "required": [
+                            "fileId"
+                        ]
+                    }
                 ]
             },
             "ContactAttachment": {
