@@ -1516,6 +1516,7 @@
                     "text": {
                         "description": "Message text",
                         "type": "string",
+                        "maxLength": 4000,
                         "nullable": true
                     },
                     "attachment": {
@@ -1908,7 +1909,8 @@
                     },
                     "text": {
                         "description": "Visible text of button",
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 128
                     },
                     "intent": {
                         "description": "Intent of button. Affects clients representation.",
@@ -1947,7 +1949,8 @@
                         "properties": {
                             "payload": {
                                 "description": "Button payload",
-                                "type": "string"
+                                "type": "string",
+                                "maxLength": 1024
                             }
                         },
                         "required": [
@@ -1965,7 +1968,8 @@
                     {
                         "properties": {
                             "url": {
-                                "type": "string"
+                                "type": "string",
+                                "maxLength": 256
                             }
                         },
                         "required": [
