@@ -1539,6 +1539,16 @@
                             "$ref": "#/components/schemas/AttachmentRequest"
                         }
                     },
+                    "link": {
+                        "description": "Link to Message",
+                        "type": "object",
+                        "nullable": true,
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/NewMessageLink"
+                            }
+                        ]
+                    },
                     "notify": {
                         "description": "If false, chat participants wouldn't be notified",
                         "type": "boolean",
@@ -1548,7 +1558,30 @@
                 },
                 "required": [
                     "text",
-                    "attachments"
+                    "attachments",
+                    "link"
+                ]
+            },
+            "NewMessageLink": {
+                "properties": {
+                    "type": {
+                        "description": "Type of message link",
+                        "nullable": false,
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MessageLinkType"
+                            }
+                        ]
+                    },
+                    "mid": {
+                        "description": "Message identifier of original message",
+                        "type": "string",
+                        "nullable": false
+                    }
+                },
+                "required": [
+                    "type",
+                    "mid"
                 ]
             },
             "LinkedMessage": {
