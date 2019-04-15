@@ -1949,16 +1949,6 @@
                         "description": "Visible text of button",
                         "type": "string",
                         "maxLength": 128
-                    },
-                    "intent": {
-                        "description": "Intent of button. Affects clients representation.",
-                        "nullable": true,
-                        "default": "default",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Intent"
-                            }
-                        ]
                     }
                 },
                 "discriminator": {
@@ -1972,8 +1962,7 @@
                 },
                 "required": [
                     "type",
-                    "text",
-                    "intent"
+                    "text"
                 ]
             },
             "CallbackButton": {
@@ -1989,6 +1978,16 @@
                                 "description": "Button payload",
                                 "type": "string",
                                 "maxLength": 1024
+                            },
+                            "intent": {
+                                "description": "Intent of button. Affects clients representation.",
+                                "readOnly": false,
+                                "default": "default",
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Intent"
+                                    }
+                                ]
                             }
                         },
                         "required": [
