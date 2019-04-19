@@ -940,8 +940,9 @@
                     },
                     {
                         "name": "types",
-                        "description": "Update types your bot want to receive.",
+                        "description": "Comma separated list of update types your bot want to receive.",
                         "in": "query",
+                        "example": "types=message_created,message_callback",
                         "schema": {
                             "type": "array",
                             "uniqueItems": true,
@@ -1084,19 +1085,13 @@
                         "properties": {
                             "avatar_url": {
                                 "description": "URL of avatar",
-                                "type": "string",
-                                "nullable": true
+                                "type": "string"
                             },
                             "full_avatar_url": {
                                 "description": "URL of avatar of a bigger size",
-                                "type": "string",
-                                "nullable": true
+                                "type": "string"
                             }
-                        },
-                        "required": [
-                            "avatar_url",
-                            "full_avatar_url"
-                        ]
+                        }
                     }
                 ]
             },
@@ -1408,7 +1403,7 @@
                 "description": "Message in chat",
                 "properties": {
                     "sender": {
-                        "description": "User that sent this message",
+                        "description": "User that sent this message. Can be `null` if message has been posted on behalf of a channel.",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/User"
@@ -1448,7 +1443,6 @@
                     }
                 },
                 "required": [
-                    "sender",
                     "recipient",
                     "body",
                     "timestamp"
