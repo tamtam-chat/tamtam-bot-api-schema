@@ -765,7 +765,7 @@
                 "parameters": [
                     {
                         "name": "user_id",
-                        "description": "Fill this paramter if you want to send message to user",
+                        "description": "Fill this parameter if you want to send message to user",
                         "in": "query",
                         "required": false,
                         "schema": {
@@ -1577,12 +1577,33 @@
                                 "$ref": "#/components/schemas/MessageBody"
                             }
                         ]
+                    },
+                    "stat": {
+                        "description": "Message staistics. Available only for channels in [GET:/messages](#operation/getMessages) context",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/MessageStat"
+                            }
+                        ],
+                        "nullable": true,
+                        "readOnly": false
                     }
                 },
                 "required": [
                     "recipient",
                     "body",
                     "timestamp"
+                ]
+            },
+            "MessageStat": {
+                "description": "Message statistics",
+                "properties": {
+                    "views": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "views"
                 ]
             },
             "MessageBody": {
