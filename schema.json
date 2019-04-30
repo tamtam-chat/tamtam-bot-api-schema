@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.1.5",
+        "version": "0.1.6",
         "title": "TamTam Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -37,11 +37,11 @@
                 "description": "Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).",
                 "responses": {
                     "200": {
-                        "description": "Expected response to a valid request",
+                        "description": "Bot info",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserWithPhoto"
+                                    "$ref": "#/components/schemas/BotInfo"
                                 }
                             }
                         }
@@ -51,6 +51,42 @@
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "bots"
+                ],
+                "summary": "Edit current bot info",
+                "operationId": "editMyInfo",
+                "description": "Edits current bot info. Fill only the fields you want to update. All remaning fields will stay untouched.",
+                "responses": {
+                    "200": {
+                        "description": "Modified bot info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BotInfo"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BotPatch"
+                            }
+                        }
                     }
                 }
             }
@@ -1085,14 +1121,114 @@
                         "properties": {
                             "avatar_url": {
                                 "description": "URL of avatar",
-                                "type": "string"
+                                "type": "string",
+                                "readOnly": false
                             },
                             "full_avatar_url": {
                                 "description": "URL of avatar of a bigger size",
-                                "type": "string"
+                                "type": "string",
+                                "readOnly": false
                             }
                         }
                     }
+                ]
+            },
+            "BotInfo": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/UserWithPhoto"
+                    },
+                    {
+                        "properties": {
+                            "commands": {
+                                "description": "Commands supported by bot",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BotCommand"
+                                },
+                                "maxItems": 32,
+                                "readOnly": false,
+                                "nullable": true
+                            },
+                            "description": {
+                                "description": "Bot description",
+                                "maxLength": 16000,
+                                "type": "string",
+                                "readOnly": false,
+                                "nullable": true
+                            }
+                        }
+                    }
+                ]
+            },
+            "BotPatch": {
+                "properties": {
+                    "name": {
+                        "description": "Visible name of bot",
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "readOnly": false,
+                        "nullable": true
+                    },
+                    "username": {
+                        "description": "Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: \"-\" or \"_\". It **must** starts with a letter",
+                        "type": "string",
+                        "pattern": "[a-z]+[a-z0-9-_]*",
+                        "readOnly": false,
+                        "minLength": 4,
+                        "maxLength": 64,
+                        "nullable": true
+                    },
+                    "description": {
+                        "description": "Bot description up to 16k characters long",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 16000,
+                        "readOnly": false,
+                        "nullable": true
+                    },
+                    "commands": {
+                        "description": "Commands supported by bot. Pass empty list if you want to remove commands",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BotCommand"
+                        },
+                        "maxItems": 32,
+                        "readOnly": false,
+                        "nullable": true
+                    },
+                    "photo": {
+                        "description": "Request to set bot photo",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PhotoAttachmentRequestPayload"
+                            }
+                        ],
+                        "readOnly": false,
+                        "nullable": true
+                    }
+                }
+            },
+            "BotCommand": {
+                "properties": {
+                    "name": {
+                        "description": "Command name",
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 1
+                    },
+                    "description": {
+                        "description": "Optional command description",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128,
+                        "readOnly": false,
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "name"
                 ]
             },
             "Chat": {
@@ -1408,7 +1544,8 @@
                             {
                                 "$ref": "#/components/schemas/User"
                             }
-                        ]
+                        ],
+                        "readOnly": false
                     },
                     "recipient": {
                         "description": "Message recipient. Could be user or chat",
@@ -2135,7 +2272,7 @@
                 "description": "Request to attach image. All fields are mutually exclusive.",
                 "properties": {
                     "url": {
-                        "description": "If specified, given URL will be attached to message as image",
+                        "description": "Any external image URL you want to attach",
                         "nullable": true,
                         "readOnly": false,
                         "type": "string"
