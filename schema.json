@@ -6,7 +6,7 @@
         "license": {
             "name": "Apache 2.0"
         },
-        "description": "# About\nBot API allows bots to interact with TamTam. Methods are called by sending HTTPS requests to [botapi.tamtam.chat](https://botapi.tamtam.chat) domain.\nBots are third-party applications that use TamTam features. A bot can legitimately take part in a conversation. It can be achieved through HTTP requests to the TamTam Bot API.\n## Features\nTamTam bots of the current version are able to:\n- Communicate with users and respond to requests\n- Recommend users complete actions via programmed buttons\n- Request personal data from users (name, short reference, phone number)\nWe'll keep working on expanding bot capabilities in the future.\n## Examples\nBots can be used for the following purposes:\n- Providing support, answering frequently asked questions\n- Sending typical information\n- Voting\n- Likes/dislikes\n- Following external links\n- Forwarding a user to a chat/channel\n## @PrimeBot\nWe are beta testing bots in TamTam now. To become a beta tester, please, contact us on **[@support](https://tt.me/support)** or [team@tamtam.chat](mailto:team@tamtam.chat). We'll give you access to [PrimeBot](https://tt.me/primebot), all TamTam bots creator. It will help you choose a unique short name for a bot and fill in its full name and description. With PrimeBot you can create bots as well as edit and delete them and browse information on bots you have created.\n#### [PrimeBot](https://tt.me/primebot) commands:\n`/start` &mdash; start a dialog with a bot\n\n`/create` &mdash; create a bot, assign the unique short name to it (from 4 to 64 characters)\n\n`/set_name [name]` &mdash; assign a short or full name to the bot (up to 200 characters)\n\n`/set_description [description]` &mdash; enter the description for the bot profile (up to 400 characters)\n\n`/set_picture [URL]` &mdash; enter the URL of bot's picture\n\n`/delete [username]` &mdash; delete the bot\n\n`/list` &mdash; show the list of all bots\n\n`/get_token` &mdash; obtain a token for a bot\n\n`/revoke` &mdash; request a new token\n\n`/help` &mdash; help\n\n## HTTP verbs\n`GET` &mdash; getting resources, parameters are transmitted via URL\n\n`POST` &mdash; creation of resources (for example, sending new messages)\n\n`PUT` &mdash; editing resources\n\n`DELETE` &mdash; deleting resources\n`PATCH` &mdash; patching resources\n## HTTP response codes\n`200` &mdash; successful operation\n\n`400` &mdash; invalid request\n\n`401` &mdash; authentication error\n\n`404` &mdash; resource not found\n\n`405` &mdash; method not allowed\n\n`429` &mdash; the number of requests is exceeded\n\n`503` &mdash; service unavailable\n\n## Resources format\nFor content requests (PUT and POST) and responses, the API uses the JSON format.\nAll strings are UTF-8 encoded.\nDate/time fields are represented as the number of milliseconds that have elapsed since 00:00 January 1, 1970 in the long format. To get it, you can simply multiply the UNIX timestamp by 1000. All date/time fields have a UTC timezone.\n## Error responses\nIn case of an error, the API returns a response with the corresponding HTTP code and JSON with the following fields:\n\n\n`code` - the string with the error key \n\n`message` - a string describing the error </br>\n\nFor example:\n```bash\n> http https://botapi.tamtam.chat/chats?access_token={EXAMPLE_TOKEN}\nHTTP / 1.1 403 Forbidden\nCache-Control: no-cache\nConnection: Keep-Alive\nContent-Length: 57\nContent-Type: application / json; charset = utf-8\nSet-Cookie: web_ui_lang = ru; Path = /; Domain = .tamtam.chat; Expires = 2019-03-24T11: 45: 36.500Z\n{\n   \"code\": \"verify.token\",\n   \"message\": \"Invalid access_token\"\n}\n```\n## Receiving Notifications\nTamTam Bot API supports 2 options of receiving notifications on new dialog events for bots:\n- Push notifications via WebHook. To receive data via WebHook, you'll have to [add subscription](https://dev.tamtam.chat/#operation/subscribe);\n- Notifications upon request via [long polling](#operation/getUpdates) API.\nAll data can be received via long polling **by default** after creating the bot,\n\nBoth methods **cannot** be used simultaneously.\nRefer to the response schema of [/updates](https://dev.tamtam.chat/#operation/getUpdates) method to check all available types of updates.\n## Message buttons\nYou can program buttons for users answering a bot.\nTamTam supports the following types of buttons: \n\n`callback` &mdash; sends a notification to a bot (via WebHook or long polling) \n\n`link` &mdash; makes a user to follow a link \n\n`request_contact` &mdash; requests the user permission to access contact information (phone number, short link, email) \n\nYou may also send a message with an [InlineKeyboard]() type attachment to start creating buttons. When the user presses a button, the bot receives the answer with filled callback field. It is recommended to edit that message so the user can receive updated buttons.\n# Versioning\nAPI models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.\nTo specify the data model version you are getting through WebHook subscription, use the `version` property in the request body of the [subscribe](https://dev.tamtam.chat/#operation/subscribe) request.\n# Libraries\nWe have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.\n# Changelog\n##### Version 0.1.6\n- Added method to [edit bot info](#operation/editMyInfo)\n- Added statistics for messages in channel\n- `Message.sender` and `UserWithPhoto.avatar_url/full_avatar_url` removed from required properties\n\n##### Version 0.1.5\n- Added `id` property to media attachments (`VideoAttachment`, `AudioAttachment`) so you can reuse attachment from one message in another\n- Added ability to create *linked* message: replied or forwarded. See `link` in `NewMessageBody`\n- `intent` property marked as required only for `CallbackButton`\n\n##### Version 0.1.4\n\n- Added `user_ids` parameter to [get members](#operation/getMembers) in chat by id\n- `attachment` property of [send message](#operation/sendMessage) request body marked as deprecated\n\n##### Version 0.1.3\n- Added method to [delete](https://dev.tamtam.chat/#operation/deleteMessages) messages\n- Added ability to [get](https://dev.tamtam.chat/#operation/getMessages) particular messages by ID\n- Added `is_admin` flag to `ChatMember`\n- Added `message` property to `MessageCallbackUpdate`\n- Renamed property `message` to `body` for `Message` schema\n- Added reusable `token` to `PhotoAttachment`. It allows to attach the same photo more than once."
+        "description": "# About\nBot API allows bots to interact with TamTam. Methods are called by sending HTTPS requests to [botapi.tamtam.chat](https://botapi.tamtam.chat) domain.\nBots are third-party applications that use TamTam features. A bot can legitimately take part in a conversation. It can be achieved through HTTP requests to the TamTam Bot API.\n## Features\nTamTam bots of the current version are able to:\n- Communicate with users and respond to requests\n- Recommend users complete actions via programmed buttons\n- Request personal data from users (name, short reference, phone number)\nWe'll keep working on expanding bot capabilities in the future.\n## Examples\nBots can be used for the following purposes:\n- Providing support, answering frequently asked questions\n- Sending typical information\n- Voting\n- Likes/dislikes\n- Following external links\n- Forwarding a user to a chat/channel\n## @PrimeBot\nWe are beta testing bots in TamTam now. To become a beta tester, please, contact us on **[@support](https://tt.me/support)** or [team@tamtam.chat](mailto:team@tamtam.chat). We'll give you access to [PrimeBot](https://tt.me/primebot), all TamTam bots creator. It will help you choose a unique short name for a bot and fill in its full name and description. With PrimeBot you can create bots as well as edit and delete them and browse information on bots you have created.\n#### [PrimeBot](https://tt.me/primebot) commands:\n`/start` &mdash; start a dialog with a bot\n\n`/create` &mdash; create a bot, assign the unique short name to it (from 4 to 64 characters)\n\n`/set_name [name]` &mdash; assign a short or full name to the bot (up to 200 characters)\n\n`/set_description [description]` &mdash; enter the description for the bot profile (up to 400 characters)\n\n`/set_picture [URL]` &mdash; enter the URL of bot's picture\n\n`/delete [username]` &mdash; delete the bot\n\n`/list` &mdash; show the list of all bots\n\n`/get_token` &mdash; obtain a token for a bot\n\n`/revoke` &mdash; request a new token\n\n`/help` &mdash; help\n\n## HTTP verbs\n`GET` &mdash; getting resources, parameters are transmitted via URL\n\n`POST` &mdash; creation of resources (for example, sending new messages)\n\n`PUT` &mdash; editing resources\n\n`DELETE` &mdash; deleting resources\n`PATCH` &mdash; patching resources\n## HTTP response codes\n`200` &mdash; successful operation\n\n`400` &mdash; invalid request\n\n`401` &mdash; authentication error\n\n`404` &mdash; resource not found\n\n`405` &mdash; method not allowed\n\n`429` &mdash; the number of requests is exceeded\n\n`503` &mdash; service unavailable\n\n## Resources format\nFor content requests (PUT and POST) and responses, the API uses the JSON format.\nAll strings are UTF-8 encoded.\nDate/time fields are represented as the number of milliseconds that have elapsed since 00:00 January 1, 1970 in the long format. To get it, you can simply multiply the UNIX timestamp by 1000. All date/time fields have a UTC timezone.\n## Error responses\nIn case of an error, the API returns a response with the corresponding HTTP code and JSON with the following fields:\n\n\n`code` - the string with the error key \n\n`message` - a string describing the error </br>\n\nFor example:\n```bash\n> http https://botapi.tamtam.chat/chats?access_token={EXAMPLE_TOKEN}\nHTTP / 1.1 403 Forbidden\nCache-Control: no-cache\nConnection: Keep-Alive\nContent-Length: 57\nContent-Type: application / json; charset = utf-8\nSet-Cookie: web_ui_lang = ru; Path = /; Domain = .tamtam.chat; Expires = 2019-03-24T11: 45: 36.500Z\n{\n   \"code\": \"verify.token\",\n   \"message\": \"Invalid access_token\"\n}\n```\n## Receiving Notifications\nTamTam Bot API supports 2 options of receiving notifications on new dialog events for bots:\n- Push notifications via WebHook. To receive data via WebHook, you'll have to [add subscription](https://dev.tamtam.chat/#operation/subscribe);\n- Notifications upon request via [long polling](#operation/getUpdates) API.\nAll data can be received via long polling **by default** after creating the bot,\n\nBoth methods **cannot** be used simultaneously.\nRefer to the response schema of [/updates](https://dev.tamtam.chat/#operation/getUpdates) method to check all available types of updates.\n## Message buttons\nYou can program buttons for users answering a bot.\nTamTam supports the following types of buttons: \n\n`callback` &mdash; sends a notification to a bot (via WebHook or long polling) \n\n`link` &mdash; makes a user to follow a link \n\n`request_contact` &mdash; requests the user permission to access contact information (phone number, short link, email) \n\nYou may also send a message with an [InlineKeyboard]() type attachment to start creating buttons. When the user presses a button, the bot receives the answer with filled callback field. It is recommended to edit that message so the user can receive updated buttons.\n# Versioning\nAPI models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.\nTo specify the data model version you are getting through WebHook subscription, use the `version` property in the request body of the [subscribe](https://dev.tamtam.chat/#operation/subscribe) request.\n# Libraries\nWe have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.\n# Changelog\n##### Version 0.1.6\n- Added method to [edit bot info](#operation/editMyInfo)\n- Added statistics for messages in channel\n- `Message.sender` and `UserWithPhoto.avatar_url/full_avatar_url` removed from required properties\n\n##### Version 0.1.5\n- Added `id` property to media attachments (`VideoAttachment`, `AudioAttachment`) so you can reuse attachment from one message in another\n- Added ability to create *linked* message: replied or forwarded. See `link` in `NewMessageBody`\n- `intent` property marked as required only for `CallbackButton`\n\n##### Version 0.1.4\n\n- Added `user_ids` parameter to [get members](#operation/getMembers) in chat by id\n- `attachment` property of [send message](#operation/sendMessage) request body marked as deprecated\n\n##### Version 0.1.3\n- Added method to [delete](https://dev.tamtam.chat/#operation/deleteMessages) messages\n- Added ability to [get](https://dev.tamtam.chat/#operation/getMessages) particular messages by ID\n- Added `is_admin` flag to `ChatMember`\n- Added `message` property to `MessageCallbackUpdate`\n- Renamed property `message` to `body` for `Message` schema\n- Added reusable `token` to `PhotoAttachment`. It allows to attach the same photo more than once"
     },
     "servers": [
         {
@@ -34,7 +34,7 @@
                 "tags": ["bots"],
                 "summary": "Get current bot info",
                 "operationId": "getMyInfo",
-                "description": "Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).",
+                "description": "Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any)",
                 "responses": {
                     "200": {
                         "description": "Bot info",
@@ -60,7 +60,7 @@
                 ],
                 "summary": "Edit current bot info",
                 "operationId": "editMyInfo",
-                "description": "Edits current bot info. Fill only the fields you want to update. All remaning fields will stay untouched.",
+                "description": "Edits current bot info. Fill only the fields you want to update. All remaning fields will stay untouched",
                 "responses": {
                     "200": {
                         "description": "Modified bot info",
@@ -97,7 +97,7 @@
                     "chats"
                 ],
                 "operationId": "getChats",
-                "description": "Returns information about chats that bot participated in: a result list and marker points to the next page.",
+                "description": "Returns information about chats that bot participated in: a result list and marker points to the next page",
                 "summary": "Get all chats",
                 "parameters": [
                     {
@@ -109,7 +109,7 @@
                             "format": "int32",
                             "minimum": 1,
                             "maximum": 100,
-                            "default": "50"
+                            "default": 50
                         }
                     },
                     {
@@ -148,7 +148,7 @@
                 ],
                 "x-opGroup": "chat",
                 "operationId": "getChat",
-                "description": "Returns info about chat.",
+                "description": "Returns info about chat",
                 "summary": "Get chat",
                 "parameters": [
                     {
@@ -285,7 +285,7 @@
                 "tags": [
                     "chats"
                 ],
-                "x-opGroup": "myMemberhip",
+                "x-opGroup": "myMembership",
                 "operationId": "getMembership",
                 "summary": "Get chat membership",
                 "description": "Returns chat membership info for current bot",
@@ -332,9 +332,9 @@
                     "chats"
                 ],
                 "operationId": "leaveChat",
-                "x-opGroup": "myMemberhip",
+                "x-opGroup": "myMembership",
                 "summary": "Leave chat",
-                "description": "Removes bot from chat members.",
+                "description": "Removes bot from chat members",
                 "parameters": [
                     {
                         "name": "chatId",
@@ -374,7 +374,7 @@
                 ],
                 "operationId": "getMembers",
                 "summary": "Get members",
-                "description": "Returns users participated in chat.",
+                "description": "Returns users participated in chat",
                 "parameters": [
                     {
                         "name": "chatId",
@@ -389,7 +389,7 @@
                     },
                     {
                         "name": "user_ids",
-                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nComma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored.",
+                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nComma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored",
                         "required": false,
                         "in": "query",
                         "schema": {
@@ -453,7 +453,7 @@
                     "chats"
                 ],
                 "operationId": "addMembers",
-                "description": "Adds members to chat. Additional permissions may require.",
+                "description": "Adds members to chat. Additional permissions may require",
                 "summary": "Add members",
                 "parameters": [
                     {
@@ -501,7 +501,7 @@
                     "chats"
                 ],
                 "operationId": "removeMember",
-                "description": "Removes member from chat. Additional permissions may require.",
+                "description": "Removes member from chat. Additional permissions may require",
                 "summary": "Remove member",
                 "parameters": [
                     {
@@ -548,7 +548,7 @@
                     "subscriptions"
                 ],
                 "operationId": "getSubscriptions",
-                "description": "In case your bot gets data via WebHook, the method returns list of all subscriptions.",
+                "description": "In case your bot gets data via WebHook, the method returns list of all subscriptions",
                 "summary": "Get subscriptions",
                 "responses": {
                     "200": {
@@ -760,7 +760,7 @@
                     "messages"
                 ],
                 "operationId": "sendMessage",
-                "description": "Sends a message to a chat. As a result for this method new message identifier returns.\n### Attaching media\nAttaching media to messages is a three-step process.\n\nAt first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.\n\nAt the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.\n\nFinally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties: \n- `type` with the value set to appropriate media type \n- and `payload` filled with the JSON you've got. \n\nFor example, you can attach a video to message this way:\n\n1. Get URL to upload. Execute following:\n```shell\ncurl -X POST \\\n  'https://botapi.tamtam.chat/uploads?access_token=%access_token%&type=video'\n```\nAs the result it will return URL for the next step.\n```json\n{\n    \"url\": \"http://vu.mycdn.me/upload.do…\"\n}\n```\n\n\n2. Use this url to upload your binary: \n```shell\ncurl -i -X POST \n    -H \"Content-Type: multipart/form-data\" \n    -F \"data=@movie.mp4\" \"http://vu.mycdn.me/upload.do…\"\n```\nAs the result it will return JSON you can attach to message:\n```json\n{\n    \"id\": 1234567890\n}\n```\n3. Send message with attach:\n```json\n{\n\t\"text\": \"Message with video\",\n\t\"attachments\": [\n\t\t{\n\t\t\t\"type\": \"video\",\n\t\t\t\"payload\": {\n\t\t\t    \"id\": 1173574260020\n\t\t\t}\n\t\t}\n\t]\n}\n```\n\n**Important notice**:\n\nIt may take time for the server to process your file (audio/video or any binary). While a file is not processed you can't attach it. It means the last step will fail with `400` error. Try to send a message again until you'll get a successful result.",
+                "description": "Sends a message to a chat. As a result for this method new message identifier returns.\n### Attaching media\nAttaching media to messages is a three-step process.\n\nAt first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.\n\nAt the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.\n\nFinally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties: \n- `type` with the value set to appropriate media type \n- and `payload` filled with the JSON you've got. \n\nFor example, you can attach a video to message this way:\n\n1. Get URL to upload. Execute following:\n```shell\ncurl -X POST \\\n  'https://botapi.tamtam.chat/uploads?access_token=%access_token%&type=video'\n```\nAs the result it will return URL for the next step.\n```json\n{\n    \"url\": \"http://vu.mycdn.me/upload.do…\"\n}\n```\n\n\n2. Use this url to upload your binary: \n```shell\ncurl -i -X POST \n    -H \"Content-Type: multipart/form-data\" \n    -F \"data=@movie.mp4\" \"http://vu.mycdn.me/upload.do…\"\n```\nAs the result it will return JSON you can attach to message:\n```json\n{\n    \"id\": 1234567890\n}\n```\n3. Send message with attach:\n```json\n{\n\t\"text\": \"Message with video\",\n\t\"attachments\": [\n\t\t{\n\t\t\t\"type\": \"video\",\n\t\t\t\"payload\": {\n\t\t\t    \"id\": 1173574260020\n\t\t\t}\n\t\t}\n\t]\n}\n```\n\n**Important notice**:\n\nIt may take time for the server to process your file (audio/video or any binary). While a file is not processed you can't attach it. It means the last step will fail with `400` error. Try to send a message again until you'll get a successful result",
                 "summary": "Send message",
                 "parameters": [
                     {
@@ -818,7 +818,7 @@
                     "messages"
                 ],
                 "operationId": "editMessage",
-                "description": "Updated message should be sent as `NewMessageBody` in a request body. In case `attachments` field is `null`, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted.",
+                "description": "Updated message should be sent as `NewMessageBody` in a request body. In case `attachments` field is `null`, the current message attachments won’t be changed. In case of sending an empty list in this field, all attachments will be deleted",
                 "summary": "Edit message",
                 "parameters": [
                     {
@@ -861,7 +861,7 @@
                 ],
                 "operationId": "deleteMessage",
                 "summary": "Delete message",
-                "description": "Deletes message in a dialog or in a chat if bot has permission to delete messages.",
+                "description": "Deletes message in a dialog or in a chat if bot has permission to delete messages",
                 "parameters": [
                     {
                         "name": "message_id",
@@ -896,7 +896,7 @@
                     "messages"
                 ],
                 "operationId": "answerOnCallback",
-                "description": "This method should be called to send an answer after a user has clicked the button. The answer may be an updated message or/and a one-time user notification.",
+                "description": "This method should be called to send an answer after a user has clicked the button. The answer may be an updated message or/and a one-time user notification",
                 "summary": "Answer on callback",
                 "parameters": [
                     {
@@ -939,12 +939,12 @@
             "get": {
                 "operationId": "getUpdates",
                 "tags": ["subscriptions"],
-                "description": "You can use this method for getting updates in case your bot is not subscribed to WebHook. The method based on long polling.",
+                "description": "You can use this method for getting updates in case your bot is not subscribed to WebHook. The method based on long polling",
                 "summary": "Get updates",
                 "parameters": [
                     {
                         "name": "limit",
-                        "description": "Maximim number of updates to be retrieved.",
+                        "description": "Maximim number of updates to be retrieved",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -955,7 +955,7 @@
                     },
                     {
                         "name": "timeout",
-                        "description": "Timeout in seconds for long polling.",
+                        "description": "Timeout in seconds for long polling",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -966,7 +966,7 @@
                     },
                     {
                         "name": "marker",
-                        "description": "Identifier of first requested update. Pass `null` to get updates you didn't get yet.",
+                        "description": "Identifier of first requested update. Pass `null` to get updates you didn't get yet",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -976,7 +976,7 @@
                     },
                     {
                         "name": "types",
-                        "description": "Comma separated list of update types your bot want to receive.",
+                        "description": "Comma separated list of update types your bot want to receive",
                         "in": "query",
                         "example": "types=message_created,message_callback",
                         "schema": {
@@ -1018,7 +1018,7 @@
             "access_token": {
                 "type": "apiKey",
                 "name": "access_token",
-                "description": "A token is given to you by [PrimeBot](https://tt.me/primebot) after you have created a bot.\nIn all subsequent requests to the Bot API, you **must** pass the received token as an `access_token` parameter to the HTTP request.\n\n\nIf [Terms and Conditions of TamTam usage](https://team.tamtam.chat/en/terms/) have been violated, the TamTam administration may withdraw tokens by aborting user sessions.\nIf your token has been compromised, you can request a new one by sending a `/revoke` command to **[PrimeBot](https://tt.me/primebot)**.",
+                "description": "A token is given to you by [PrimeBot](https://tt.me/primebot) after you have created a bot.\nIn all subsequent requests to the Bot API, you **must** pass the received token as an `access_token` parameter to the HTTP request.\n\n\nIf [Terms and Conditions of TamTam usage](https://team.tamtam.chat/en/terms/) have been violated, the TamTam administration may withdraw tokens by aborting user sessions.\nIf your token has been compromised, you can request a new one by sending a `/revoke` command to **[PrimeBot](https://tt.me/primebot)**",
                 "in": "query"
             }
         },
@@ -1074,7 +1074,7 @@
                 }
             },
             "NotAllowed": {
-                "description": "Method not allowed",
+                "description": "Method is not allowed",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -1092,16 +1092,16 @@
             "User": {
                 "properties": {
                     "user_id": {
-                        "description": "Users identifier",
+                        "description": "User's identifier",
                         "type": "integer",
                         "format": "int64"
                     },
                     "name": {
-                        "description": "Users visible name",
+                        "description": "User's visible name",
                         "type": "string"
                     },
                     "username": {
-                        "description": "Unique public user name. Can be `null` if user is not accessible or it is not set",
+                        "description": "User's unique public user name. Can be `null` if user is not accessible or the username is not set",
                         "type": "string",
                         "nullable": true
                     }
@@ -1125,7 +1125,7 @@
                                 "readOnly": false
                             },
                             "full_avatar_url": {
-                                "description": "URL of avatar of a bigger size",
+                                "description": "URL of a bigger size of avatar",
                                 "type": "string",
                                 "readOnly": false
                             }
@@ -1164,7 +1164,7 @@
             "BotPatch": {
                 "properties": {
                     "name": {
-                        "description": "Visible name of bot",
+                        "description": "Visible bot's name",
                         "type": "string",
                         "maxLength": 64,
                         "minLength": 1,
@@ -1172,7 +1172,7 @@
                         "nullable": true
                     },
                     "username": {
-                        "description": "Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: \"-\" or \"_\". It **must** starts with a letter",
+                        "description": "Bot's unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: \"-\" or \"_\". It **must** starts with a letter",
                         "type": "string",
                         "pattern": "[a-z]+[a-z0-9-_]*",
                         "readOnly": false,
@@ -1181,7 +1181,7 @@
                         "nullable": true
                     },
                     "description": {
-                        "description": "Bot description up to 16k characters long",
+                        "description": "Bot's description, up to 16k characters long",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 16000,
@@ -1234,12 +1234,13 @@
             "Chat": {
                 "properties": {
                     "chat_id": {
-                        "description": "Chats identifier",
+                        "description": "Chat's identifier",
                         "type": "integer",
                         "format": "int64"
                     },
                     "type": {
                         "description": "Type of chat. One of: dialog, chat, channel",
+                        "type": "string",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ChatType"
@@ -1247,7 +1248,7 @@
                         ]
                     },
                     "status": {
-                        "description": "Chat status. One of:\n - active: bot is active member of chat\n - removed: bot was kicked\n - left: bot intentionally left chat\n - closed: chat was closed",
+                        "description": "Chat status. One of:\n - active: bot is active member of chat\n - removed: bot was kicked\n - left: bot intentionally left chat\n - closed: chat was closed\n - suspended: bot was suspended",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ChatStatus"
@@ -1255,12 +1256,12 @@
                         ]
                     },
                     "title": {
-                        "description": "Visible title of chat. Can be null for dialogs",
+                        "description": "Chat title. Can be null for dialogs",
                         "type": "string",
                         "nullable": true
                     },
                     "icon": {
-                        "description": "Icon of chat",
+                        "description": "Chat icon",
                         "nullable": true,
                         "allOf": [
                             {
@@ -1300,13 +1301,13 @@
                         "type": "boolean"
                     },
                     "link": {
-                        "description": "Link on chat if it is public",
+                        "description": "Chat's link if it is public",
                         "type": "string",
                         "readOnly": false,
                         "nullable": true
                     },
                     "description": {
-                        "description": "Chat description",
+                        "description": "Chat's description",
                         "nullable": true
                     }
                 },
@@ -1331,7 +1332,7 @@
                 ]
             },
             "ChatStatus": {
-                "description": "Chat status for current bot",
+                "description": "Chat's status for current bot",
                 "enum": [
                     "active",
                     "removed",
@@ -1401,7 +1402,7 @@
                                 "format": "int64"
                             },
                             "permissions": {
-                                "description": "Permissions in chat if member is admin. `null` otherwise",
+                                "description": "Permissions in chat if member is admin, `null` otherwise",
                                 "type": "array",
                                 "uniqueItems": true,
                                 "nullable": true,
@@ -1425,7 +1426,7 @@
                 ]
             },
             "ChatAdminPermission": {
-                "description": "Chat admin permissions",
+                "description": "Chat admin's permissions",
                 "type": "string",
                 "enum": [
                     "read_all_messages",
@@ -1506,7 +1507,7 @@
                 ]
             },
             "Recipient": {
-                "description": "New message recepient. Could be user or chat",
+                "description": "New message recipient. Could be user or chat",
                 "properties": {
                     "chat_id": {
                         "description": "Chat identifier",
@@ -1523,7 +1524,7 @@
                         ]
                     },
                     "user_id": {
-                        "description": "User identifier, if message was sent to user",
+                        "description": "User's identifier, if message was sent to user",
                         "type": "integer",
                         "format": "int64",
                         "nullable": true
@@ -1539,7 +1540,7 @@
                 "description": "Message in chat",
                 "properties": {
                     "sender": {
-                        "description": "User that sent this message. Can be `null` if message has been posted on behalf of a channel.",
+                        "description": "User that sent this message. Can be `null` if message has been posted on behalf of a channel",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/User"
@@ -1571,7 +1572,7 @@
                         ]
                     },
                     "body": {
-                        "description": "Body of created message. Text + attachments. Could be null if message contains only forwarded message.",
+                        "description": "Body of created message. Text + attachments. Could be null if message contains only forwarded message",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/MessageBody"
@@ -1579,7 +1580,7 @@
                         ]
                     },
                     "stat": {
-                        "description": "Message staistics. Available only for channels in [GET:/messages](#operation/getMessages) context",
+                        "description": "Message statistics. Available only for channels in [GET:/messages](#operation/getMessages) context",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/MessageStat"
@@ -1634,7 +1635,7 @@
                     },
                     "reply_to": {
                         "deprecated": true,
-                        "description": "In case this message is repled to, it is the unique identifier of the replied message",
+                        "description": "In case this message is replied to, it is the unique identifier of the replied message",
                         "type": "string",
                         "nullable": true,
                         "readOnly": false
@@ -1672,7 +1673,7 @@
                         "nullable": true
                     },
                     "attachment": {
-                        "description": "Use `attachments` property instead. Will be removed in the next major release.\n\nSingle message attachment.",
+                        "description": "Use `attachments` property instead. Will be removed in the next major release.\n\nSingle message attachment",
                         "deprecated": true,
                         "type": "object",
                         "nullable": true,
@@ -1684,7 +1685,7 @@
                         ]
                     },
                     "attachments": {
-                        "description": "Message attachments. See `AttachmentRequest` and it's inheritors for full information.",
+                        "description": "Message attachments. See `AttachmentRequest` and it's inheritors for full information",
                         "type": "array",
                         "nullable": true,
                         "items": {
@@ -2165,7 +2166,7 @@
                                 "maxLength": 1024
                             },
                             "intent": {
-                                "description": "Intent of button. Affects clients representation.",
+                                "description": "Intent of button. Affects clients representation",
                                 "readOnly": false,
                                 "default": "default",
                                 "allOf": [
@@ -2290,7 +2291,7 @@
                 ]
             },
             "PhotoAttachmentRequestPayload": {
-                "description": "Request to attach image. All fields are mutually exclusive.",
+                "description": "Request to attach image. All fields are mutually exclusive",
                 "properties": {
                     "url": {
                         "description": "Any external image URL you want to attach",
@@ -2841,7 +2842,7 @@
                                 ]
                             },
                             "message": {
-                                "description": "Original message containing inline keyboard. Can be `null` in case it had been deleted by the moment a bot got this update.",
+                                "description": "Original message containing inline keyboard. Can be `null` in case it had been deleted by the moment a bot got this update",
                                 "nullable": true,
                                 "allOf": [
                                     {
