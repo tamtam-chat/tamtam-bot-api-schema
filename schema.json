@@ -2163,6 +2163,8 @@
                             "payload": {
                                 "description": "Button payload",
                                 "type": "string",
+                                "nullable": true,
+                                "required": false,
                                 "maxLength": 1024
                             },
                             "intent": {
