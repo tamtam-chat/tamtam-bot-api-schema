@@ -1942,6 +1942,11 @@
                                 "description": "Identifier of media attachment",
                                 "type": "integer",
                                 "format": "int64"
+                            },
+                            "token": {
+                                "description": "Token to attach this file to message",
+                                "type": "string",
+                                "readOnly": false
                             }
                         },
                         "required": [
@@ -1958,13 +1963,24 @@
                     {
                         "properties": {
                             "fileId": {
-                                "description": "Identifier of uploaded file",
+                                "deprecated": true,
+                                "description": "Use `token` property if you want to use this attachment in other message",
                                 "type": "integer",
                                 "format": "int64"
+                            },
+                            "token": {
+                                "description": "File unique identifier",
+                                "type": "string"
+                            },
+                            "filename": {
+                                "description": "Uploaded file name",
+                                "type": "string"
                             }
                         },
                         "required": [
-                            "fileId"
+                            "fileId",
+                            "token",
+                            "filename"
                         ]
                     }
                 ]
@@ -2390,6 +2406,11 @@
                     "id": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "token": {
+                        "description": "Token to attach this file to message",
+                        "type": "string",
+                        "readOnly": false
                     }
                 },
                 "required": [
@@ -2433,7 +2454,13 @@
                     "fileId": {
                         "description": "Unique file identifier",
                         "type": "integer",
-                        "format": "int64"
+                        "format": "int64",
+                        "deprecated": true
+                    },
+                    "token": {
+                        "description": "Token to attach this file to message",
+                        "type": "string",
+                        "readOnly": false
                     }
                 },
                 "required": [
