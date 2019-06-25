@@ -1912,10 +1912,21 @@
                                         "$ref": "#/components/schemas/FileAttachmentPayload"
                                     }
                                 ]
+                            },
+                            "filename": {
+                                "description": "Uploaded file name",
+                                "type": "string"
+                            },
+                            "size": {
+                                "description": "File size in bytes",
+                                "type": "integer",
+                                "format": "int64"
                             }
                         },
                         "required": [
-                            "payload"
+                            "payload",
+                            "filename",
+                            "size"
                         ]
                     }
                 ]
@@ -1971,16 +1982,11 @@
                             "token": {
                                 "description": "File unique identifier",
                                 "type": "string"
-                            },
-                            "filename": {
-                                "description": "Uploaded file name",
-                                "type": "string"
                             }
                         },
                         "required": [
                             "fileId",
-                            "token",
-                            "filename"
+                            "token"
                         ]
                     }
                 ]
