@@ -2968,15 +2968,18 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
-                                "description": "User id who added bot to chat",
-                                "type": "integer",
-                                "format": "int64"
+                            "user": {
+                                "description": "User who added bot to chat",
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             }
                         },
                         "required": [
                             "chat_id",
-                            "user_id"
+                            "user"
                         ]
                     }
                 ]
@@ -2994,15 +2997,18 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
-                                "description": "User id who removed bot from chat",
-                                "type": "integer",
-                                "format": "int64"
+                            "user": {
+                                "description": "User who removed bot from chat",
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             }
                         },
                         "required": [
                             "chat_id",
-                            "user_id"
+                            "user"
                         ]
                     }
                 ]
@@ -3020,10 +3026,13 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
+                            "user": {
                                 "description": "User added to chat",
-                                "type": "integer",
-                                "format": "int64"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             },
                             "inviter_id": {
                                 "description": "User who added user to chat",
@@ -3033,7 +3042,7 @@
                         },
                         "required": [
                             "chat_id",
-                            "user_id",
+                            "user",
                             "inviter_id"
                         ]
                     }
@@ -3052,10 +3061,13 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
+                            "user": {
                                 "description": "User removed from chat",
-                                "type": "integer",
-                                "format": "int64"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             },
                             "admin_id": {
                                 "description": "Administrator who removed user from chat",
@@ -3065,7 +3077,7 @@
                         },
                         "required": [
                             "chat_id",
-                            "user_id",
+                            "user",
                             "admin_id"
                         ]
                     }
@@ -3084,15 +3096,18 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
+                            "user": {
                                 "description": "User pressed the 'Start' button",
-                                "type": "integer",
-                                "format": "int64"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             }
                         },
                         "required": [
                             "chat_id",
-                            "user_id"
+                            "user"
                         ]
                     }
                 ]
@@ -3110,10 +3125,13 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "user_id": {
+                            "user": {
                                 "description": "User who changed title",
-                                "type": "integer",
-                                "format": "int64"
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
                             },
                             "title": {
                                 "description": "New title",
@@ -3122,7 +3140,7 @@
                         },
                         "required": [
                             "chat_id",
-                            "user_id",
+                            "user",
                             "title"
                         ]
                     }
