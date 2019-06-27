@@ -574,7 +574,7 @@
                     "subscriptions"
                 ],
                 "operationId": "subscribe",
-                "description": "Subscribes bot to receive updates via WebHook. After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL",
+                "description": "Subscribes bot to receive updates via WebHook. After calling this method, the bot will receive notifications about new events in chat rooms at the specified URL.\n\nYour server **must** be listening on one of the following ports: **80, 8080, 443, 8443, 16384-32383**",
                 "summary": "Subscribe",
                 "requestBody": {
                     "required": true,
@@ -939,7 +939,7 @@
             "get": {
                 "operationId": "getUpdates",
                 "tags": ["subscriptions"],
-                "description": "You can use this method for getting updates in case your bot is not subscribed to WebHook. The method based on long polling.",
+                "description": "You can use this method for getting updates in case your bot is not subscribed to WebHook. The method is based on long polling.\n\nEvery update has its own sequence number. `marker` property in response points to the next upcoming update.\n\nAll previous updates are considered as *committed* after passing `marker` parameter. If `marker` parameter is **not passed**, your bot will get all updates happened before the last commitment.",
                 "summary": "Get updates",
                 "parameters": [
                     {
@@ -966,7 +966,7 @@
                     },
                     {
                         "name": "marker",
-                        "description": "Identifier of first requested update. Pass `null` to get updates you didn't get yet.",
+                        "description": "Pass `null` to get updates you didn't get yet",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -1473,7 +1473,7 @@
                 "description": "Schema to describe WebHook subscription",
                 "properties": {
                     "url": {
-                        "description": "WebHook URL",
+                        "description": "Webhook URL",
                         "type": "string"
                     },
                     "time": {
@@ -1950,12 +1950,12 @@
                     {
                         "properties": {
                             "id": {
-                                "description": "Identifier of media attachment",
+                                "description": "Unique identifier of media attachment",
                                 "type": "integer",
                                 "format": "int64"
                             },
                             "token": {
-                                "description": "Token to attach this file to message",
+                                "description": "Use `token` along with `id` in case when you are trying to reuse the same attachment in other message",
                                 "type": "string",
                                 "readOnly": false
                             }
@@ -1975,12 +1975,12 @@
                         "properties": {
                             "fileId": {
                                 "deprecated": true,
-                                "description": "Use `token` property if you want to use this attachment in other message",
+                                "description": "Uploaded file unique identifier",
                                 "type": "integer",
                                 "format": "int64"
                             },
                             "token": {
-                                "description": "File unique identifier",
+                                "description": "Use `token` along with `fileId` in case when you are trying to reuse the same attachment in other message",
                                 "type": "string"
                             }
                         },
@@ -2410,11 +2410,12 @@
                 "description": "This is information you will recieve as soon as audio/video is uploaded",
                 "properties": {
                     "id": {
+                        "description": "Uploaded file unique identifier",
                         "type": "integer",
                         "format": "int64"
                     },
                     "token": {
-                        "description": "Token to attach this file to message",
+                        "description": "Token is **required** in case you are trying to attach a media uploaded by another user",
                         "type": "string",
                         "readOnly": false
                     }
@@ -2464,7 +2465,7 @@
                         "deprecated": true
                     },
                     "token": {
-                        "description": "Token to attach this file to message",
+                        "description": "Token is **required** in case you are trying to attach a media uploaded by another user",
                         "type": "string",
                         "readOnly": false
                     }
@@ -2627,7 +2628,7 @@
                 "description": "Request to set up WebHook subscription",
                 "properties": {
                     "url": {
-                        "description": "URL of HTTP(S)-endpoint of your bot",
+                        "description": "URL of HTTP(S)-endpoint of your bot. Must starts with http(s)://",
                         "type": "string"
                     },
                     "update_types": {
