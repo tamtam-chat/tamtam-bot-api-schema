@@ -2004,6 +2004,24 @@
                     "tamInfo"
                 ]
             },
+            "StickerAttachmentPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AttachmentPayload"
+                    },
+                    {
+                        "properties": {
+                            "code": {
+                                "description": "Sticker identifier",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "code"
+                        ]
+                    }
+                ]
+            },
             "StickerAttachment": {
                 "allOf": [
                     {
@@ -2015,13 +2033,23 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/AttachmentPayload"
+                                        "$ref": "#/components/schemas/StickerAttachmentPayload"
                                     }
                                 ]
+                            },
+                            "width": {
+                                "description": "Sticker wigth",
+                                "type": "integer"
+                            },
+                            "height": {
+                                "description": "Sticker height",
+                                "type": "integer"
                             }
                         },
                         "required": [
-                            "payload"
+                            "payload",
+                            "width",
+                            "height"
                         ]
                     }
                 ]
