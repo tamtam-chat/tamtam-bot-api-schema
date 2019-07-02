@@ -1634,7 +1634,7 @@
                     },
                     "reply_to": {
                         "deprecated": true,
-                        "description": "In case this message is repled to, it is the unique identifier of the replied message",
+                        "description": "In case this message is reply to another, it is the unique identifier of the replied message",
                         "type": "string",
                         "nullable": true,
                         "readOnly": false
@@ -1909,7 +1909,7 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/FileAttachmentPayload"
+                                        "$ref": "#/components/schemas/MediaAttachmentPayload"
                                     }
                                 ]
                             },
@@ -1949,43 +1949,12 @@
                     },
                     {
                         "properties": {
-                            "id": {
-                                "description": "Unique identifier of media attachment",
-                                "type": "integer",
-                                "format": "int64"
-                            },
                             "token": {
-                                "description": "Use `token` along with `id` in case when you are trying to reuse the same attachment in other message",
-                                "type": "string",
-                                "readOnly": false
-                            }
-                        },
-                        "required": [
-                            "id"
-                        ]
-                    }
-                ]
-            },
-            "FileAttachmentPayload": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/AttachmentPayload"
-                    },
-                    {
-                        "properties": {
-                            "fileId": {
-                                "deprecated": true,
-                                "description": "Uploaded file unique identifier",
-                                "type": "integer",
-                                "format": "int64"
-                            },
-                            "token": {
-                                "description": "Use `token` along with `fileId` in case when you are trying to reuse the same attachment in other message",
+                                "description": "Use `token` in case when you are trying to reuse the same attachment in other message",
                                 "type": "string"
                             }
                         },
                         "required": [
-                            "fileId",
                             "token"
                         ]
                     }
@@ -2409,19 +2378,13 @@
             "UploadedInfo": {
                 "description": "This is information you will recieve as soon as audio/video is uploaded",
                 "properties": {
-                    "id": {
-                        "description": "Uploaded file unique identifier",
-                        "type": "integer",
-                        "format": "int64"
-                    },
                     "token": {
-                        "description": "Token is **required** in case you are trying to attach a media uploaded by another user",
-                        "type": "string",
-                        "readOnly": false
+                        "description": "Token is unique uploaded media identfier",
+                        "type": "string"
                     }
                 },
                 "required": [
-                    "id"
+                    "token"
                 ]
             },
             "FileAttachmentRequest": {
@@ -2435,7 +2398,7 @@
                             "payload": {
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/UploadedFileInfo"
+                                        "$ref": "#/components/schemas/UploadedInfo"
                                     }
                                 ]
                             }
@@ -2453,25 +2416,6 @@
                     "video",
                     "audio",
                     "file"
-                ]
-            },
-            "UploadedFileInfo": {
-                "description": "This is information you will recieve as soon as a file is uploaded",
-                "properties": {
-                    "fileId": {
-                        "description": "Unique file identifier",
-                        "type": "integer",
-                        "format": "int64",
-                        "deprecated": true
-                    },
-                    "token": {
-                        "description": "Token is **required** in case you are trying to attach a media uploaded by another user",
-                        "type": "string",
-                        "readOnly": false
-                    }
-                },
-                "required": [
-                    "fileId"
                 ]
             },
             "ContactAttachmentRequest": {
