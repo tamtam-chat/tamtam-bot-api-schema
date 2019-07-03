@@ -2710,7 +2710,7 @@
                 },
                 "required": [
                     "timestamp",
-                    "payload",
+                    "callback_id",
                     "user"
                 ]
             },
