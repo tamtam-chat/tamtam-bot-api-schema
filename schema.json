@@ -1755,7 +1755,7 @@
                         ]
                     },
                     "chat_id": {
-                        "description": "Chat where message was originally posted",
+                        "description": "Chat where message has been originally posted. For forwarded messages only",
                         "type": "integer",
                         "format": "int64"
                     },
@@ -1769,8 +1769,7 @@
                 },
                 "required": [
                     "type",
-                    "message",
-                    "chat_id"
+                    "message"
                 ]
             },
             "SendMessageResult": {
