@@ -1909,7 +1909,7 @@
                                 "type": "object",
                                 "allOf": [
                                     {
-                                        "$ref": "#/components/schemas/MediaAttachmentPayload"
+                                        "$ref": "#/components/schemas/FileAttachmentPayload"
                                     }
                                 ]
                             },
@@ -1943,6 +1943,24 @@
                 ]
             },
             "MediaAttachmentPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AttachmentPayload"
+                    },
+                    {
+                        "properties": {
+                            "token": {
+                                "description": "Use `token` in case when you are trying to reuse the same attachment in other message",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "token"
+                        ]
+                    }
+                ]
+            },
+            "FileAttachmentPayload": {
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/AttachmentPayload"
@@ -2408,12 +2426,10 @@
                 "properties": {
                     "token": {
                         "description": "Token is unique uploaded media identfier",
-                        "type": "string"
+                        "type": "string",
+                        "readOnly": false
                     }
-                },
-                "required": [
-                    "token"
-                ]
+                }
             },
             "FileAttachmentRequest": {
                 "description": "Request to attach file to message. MUST be the only attachment in message",
