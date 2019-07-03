@@ -1747,7 +1747,7 @@
                         ]
                     },
                     "sender": {
-                        "description": "User sent this message",
+                        "description": "User sent this message. Can be `null` if message has been posted on behalf of a channel",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/User"
@@ -1770,7 +1770,6 @@
                 "required": [
                     "type",
                     "message",
-                    "sender",
                     "chat_id"
                 ]
             },
