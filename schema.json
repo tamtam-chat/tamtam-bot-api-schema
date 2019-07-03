@@ -1979,10 +1979,6 @@
                                 "type": "integer",
                                 "format": "int64"
                             },
-                            "url": {
-                                "description": "URL of file",
-                                "type": "string"
-                            },
                             "token": {
                                 "description": "Use `token` along with `fileId` in case when you are trying to reuse the same attachment in other message",
                                 "type": "string"
@@ -1990,7 +1986,6 @@
                         },
                         "required": [
                             "fileId",
-                            "url",
                             "token"
                         ]
                     }
