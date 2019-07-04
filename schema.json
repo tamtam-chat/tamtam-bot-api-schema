@@ -1110,6 +1110,7 @@
                 },
                 "required": [
                     "user_id",
+                    "name",
                     "username"
                 ]
             },
@@ -1851,7 +1852,8 @@
                 },
                 "required": [
                     "photo_id",
-                    "url"
+                    "url",
+                    "token"
                 ]
             },
             "VideoAttachment": {
@@ -2853,7 +2855,8 @@
                     }
                 },
                 "required": [
-                    "update_type"
+                    "update_type",
+                    "timestamp"
                 ]
             },
             "MessageCallbackUpdate": {
