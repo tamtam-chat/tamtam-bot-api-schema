@@ -34,7 +34,7 @@
                 "tags": ["bots"],
                 "summary": "Get current bot info",
                 "operationId": "getMyInfo",
-                "description": "Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any).",
+                "description": "Returns info about current bot. Current bot can be identified by access token. Method returns bot identifier, name and avatar (if any)",
                 "responses": {
                     "200": {
                         "description": "Bot info",
@@ -60,7 +60,7 @@
                 ],
                 "summary": "Edit current bot info",
                 "operationId": "editMyInfo",
-                "description": "Edits current bot info. Fill only the fields you want to update. All remaining fields will stay untouched.",
+                "description": "Edits current bot info. Fill only the fields you want to update. All remaining fields will stay untouched",
                 "responses": {
                     "200": {
                         "description": "Modified bot info",
@@ -97,7 +97,7 @@
                     "chats"
                 ],
                 "operationId": "getChats",
-                "description": "Returns information about chats that bot participated in: a result list and marker points to the next page.",
+                "description": "Returns information about chats that bot participated in: a result list and marker points to the next page",
                 "summary": "Get all chats",
                 "parameters": [
                     {
@@ -389,7 +389,7 @@
                     },
                     {
                         "name": "user_ids",
-                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nComma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored.",
+                        "description": "*Since* version [0.1.4](#section/About/Changelog).\n\nComma-separated list of users identifiers to get their membership. When this parameter is passed, both `count` and `marker` are ignored",
                         "required": false,
                         "in": "query",
                         "schema": {
@@ -549,7 +549,7 @@
                     "subscriptions"
                 ],
                 "operationId": "getSubscriptions",
-                "description": "In case your bot gets data via WebHook, the method returns list of all subscriptions.",
+                "description": "In case your bot gets data via WebHook, the method returns list of all subscriptions",
                 "summary": "Get subscriptions",
                 "responses": {
                     "200": {
@@ -945,7 +945,7 @@
                 "parameters": [
                     {
                         "name": "limit",
-                        "description": "Maximum number of updates to be retrieved.",
+                        "description": "Maximum number of updates to be retrieved",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -956,7 +956,7 @@
                     },
                     {
                         "name": "timeout",
-                        "description": "Timeout in seconds for long polling.",
+                        "description": "Timeout in seconds for long polling",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -977,7 +977,7 @@
                     },
                     {
                         "name": "types",
-                        "description": "Comma separated list of update types your bot want to receive.",
+                        "description": "Comma separated list of update types your bot want to receive",
                         "in": "query",
                         "example": "types=message_created,message_callback",
                         "schema": {
@@ -1541,7 +1541,7 @@
                 "description": "Message in chat",
                 "properties": {
                     "sender": {
-                        "description": "User that sent this message. Can be `null` if message has been posted on behalf of a channel.",
+                        "description": "User that sent this message. Can be `null` if message has been posted on behalf of a channel",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/User"
@@ -1573,7 +1573,7 @@
                         ]
                     },
                     "body": {
-                        "description": "Body of created message. Text + attachments. Could be null if message contains only forwarded message.",
+                        "description": "Body of created message. Text + attachments. Could be null if message contains only forwarded message",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/MessageBody"
@@ -1674,7 +1674,7 @@
                         "nullable": true
                     },
                     "attachment": {
-                        "description": "Use `attachments` property instead. Will be removed in the next major release.\n\nSingle message attachment.",
+                        "description": "Use `attachments` property instead. Will be removed in the next major release.\n\nSingle message attachment",
                         "deprecated": true,
                         "type": "object",
                         "nullable": true,
@@ -1686,7 +1686,7 @@
                         ]
                     },
                     "attachments": {
-                        "description": "Message attachments. See `AttachmentRequest` and it's inheritors for full information.",
+                        "description": "Message attachments. See `AttachmentRequest` and it's inheritors for full information",
                         "type": "array",
                         "nullable": true,
                         "items": {
@@ -2202,7 +2202,7 @@
                                 "maxLength": 1024
                             },
                             "intent": {
-                                "description": "Intent of button. Affects clients representation.",
+                                "description": "Intent of button. Affects clients representation",
                                 "readOnly": false,
                                 "default": "default",
                                 "allOf": [
@@ -2327,7 +2327,7 @@
                 ]
             },
             "PhotoAttachmentRequestPayload": {
-                "description": "Request to attach image. All fields are mutually exclusive.",
+                "description": "Request to attach image. All fields are mutually exclusive",
                 "properties": {
                     "url": {
                         "description": "Any external image URL you want to attach",
@@ -2862,7 +2862,7 @@
                                 ]
                             },
                             "message": {
-                                "description": "Original message containing inline keyboard. Can be `null` in case it had been deleted by the moment a bot got this update.",
+                                "description": "Original message containing inline keyboard. Can be `null` in case it had been deleted by the moment a bot got this update",
                                 "nullable": true,
                                 "allOf": [
                                     {
