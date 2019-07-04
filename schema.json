@@ -109,7 +109,7 @@
                             "format": "int32",
                             "minimum": 1,
                             "maximum": 100,
-                            "default": "50"
+                            "default": 50
                         }
                     },
                     {
@@ -1076,7 +1076,7 @@
                 }
             },
             "NotAllowed": {
-                "description": "Method not allowed",
+                "description": "Method is not allowed",
                 "content": {
                     "application/json": {
                         "schema": {
