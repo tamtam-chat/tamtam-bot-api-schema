@@ -1754,12 +1754,14 @@
                             {
                                 "$ref": "#/components/schemas/User"
                             }
-                        ]
+                        ],
+                        "readOnly": false
                     },
                     "chat_id": {
                         "description": "Chat where message has been originally posted. For forwarded messages only",
                         "type": "integer",
-                        "format": "int64"
+                        "format": "int64",
+                        "readOnly": false
                     },
                     "message": {
                         "allOf": [
@@ -2660,6 +2662,11 @@
                     "success": {
                         "description": "`true` if request was successful. `false` otherwise",
                         "type": "boolean"
+                    },
+                    "message": {
+                        "description": "Explanatory message if the result is not successful",
+                        "type": "string",
+                        "readOnly": false
                     }
                 },
                 "required": [
@@ -2680,7 +2687,8 @@
                     },
                     "payload": {
                         "description": "Button payload",
-                        "type": "string"
+                        "type": "string",
+                        "readOnly": false
                     },
                     "user": {
                         "description": "User pressed the button",
