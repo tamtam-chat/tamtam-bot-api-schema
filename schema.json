@@ -2335,6 +2335,7 @@
                 "properties": {
                     "url": {
                         "description": "Any external image URL you want to attach",
+                        "minLength": 1,
                         "nullable": true,
                         "readOnly": false,
                         "type": "string"
