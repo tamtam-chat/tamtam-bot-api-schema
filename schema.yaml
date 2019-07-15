@@ -26,9 +26,8 @@ info:
     - Forwarding a user to a chat/channel
 
     ## @PrimeBot
-    [PrimeBot](https://tt.me/primebot) is all TamTam bots creator. It will help you choose a unique short name for a bot
-    and fill in its full name and description. With PrimeBot you can create bots as well as edit and delete them and
-    browse information on bots you have created.
+    [PrimeBot](https://tt.me/primebot) is the main bot in TamTam, all bots creator. Use PrimeBot to create and edit
+    your bots. Feel free to contact us for any questions, [@support](https://tt.me/support) or [team@tamtam.chat](mailto:team@tamtam.chat).
 
     #### [PrimeBot](https://tt.me/primebot) commands:
     `/start` &mdash; start a dialog with a bot
@@ -1930,7 +1929,7 @@ components:
       description: List of all WebHook subscriptions
       properties:
         subscriptions:
-          description: Current subcriptions
+          description: Current subscriptions
           type: array
           items:
             $ref: '#/components/schemas/Subscription'
