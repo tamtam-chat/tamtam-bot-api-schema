@@ -131,16 +131,16 @@ info:
 
     # Changelog
     ##### Version 0.1.8
-    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L2047)
+    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1580)
     - `token` is now only one required property for video/audio/file attachments
-    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1743) are now optional
-    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L2662)
+    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
+    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
 
     ##### Version 0.1.7
     - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial 
     - Added full `User` object to update types: bot_started, bot_added, bot_removed, user_added, user_removed, chat_title_changed
-    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1916)
-    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1957) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
+    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1503)
+    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1525) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
 
     ##### Version 0.1.6
     - Added method to [edit bot info](#operation/editMyInfo)
