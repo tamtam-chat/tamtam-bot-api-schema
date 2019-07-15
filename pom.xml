@@ -43,7 +43,7 @@
             <resource>
                 <directory>${project.basedir}</directory>
                 <includes>
-                    <include>schema.json</include>
+                    <include>schema.yaml</include>
                 </includes>
             </resource>
         </resources>
