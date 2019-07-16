@@ -731,7 +731,8 @@ paths:
         ```json
         {
             "url": "http://vu.mycdn.me/upload.do…"
-        }```
+        }
+        ```
 
         2. Use this url to upload your binary:
         ```shell
@@ -743,7 +744,8 @@ paths:
         ```json
           {
             "token": "_3Rarhcf1PtlMXy8jpgie8Ai_KARnVFYNQTtmIRWNh4"
-          }```
+          }
+        ```
         3. Send message with attach:
         ```json
         {
