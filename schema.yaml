@@ -889,7 +889,8 @@ paths:
 
         Every update has its own sequence number. `marker` property in response points to the next upcoming update.
 
-        All previous updates are considered as *committed* after passing `marker` parameter. If `marker` parameter is **not passed**, your bot will get all updates happened before the last commitment.
+        All previous updates are considered as *committed* after passing `marker` parameter.
+        If `marker` parameter is **not passed**, your bot will get all updates happened after the last commitment.
       summary: Get updates
       parameters:
         - name: limit
