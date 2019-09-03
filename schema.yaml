@@ -659,9 +659,10 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/bigint'
-        - description: Messages ids you want to get
+        - description: Comma-separated list of message ids to get
           name: message_ids
           in: query
+          style: simple
           schema:
             uniqueItems: true
             items:
