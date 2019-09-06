@@ -2032,10 +2032,6 @@ components:
     CallbackAnswer:
       description: Send this object when your bot wants to react to when a button is pressed
       properties:
-        user_id:
-          type: integer
-          format: int64
-          readOnly: false
         message:
           description: Fill this if you want to modify current message
           nullable: true
