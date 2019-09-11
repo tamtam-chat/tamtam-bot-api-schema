@@ -2226,13 +2226,14 @@ components:
               allOf:
                 - $ref: '#/components/schemas/User'
             inviter_id:
-              description: User who added user to chat
+              description: User who added user to chat. Can be `null` in case when user joined chat by link
               type: integer
               format: int64
+              readOnly: false
+              nullable: true
           required:
             - chat_id
             - user
-            - inviter_id
     UserRemovedFromChatUpdate:
       description: You will receive this update when user has been removed from chat where bot is administrator
       allOf:
