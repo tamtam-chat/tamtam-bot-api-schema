@@ -2248,13 +2248,13 @@ components:
               allOf:
                 - $ref: '#/components/schemas/User'
             admin_id:
-              description: Administrator who removed user from chat
+              description: Administrator who removed user from chat. Can be `null` in case when user left chat
               type: integer
               format: int64
+              readOnly: false
           required:
             - chat_id
             - user
-            - admin_id
     BotStartedUpdate:
       description: Bot gets this type of update as soon as user pressed `Start` button
       allOf:
