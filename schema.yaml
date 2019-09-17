@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.1.8
+  version: 0.1.9
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -83,7 +83,7 @@ info:
     ## Error responses
     In case of an error, the API returns a response with the corresponding HTTP code and JSON with the following fields:
 
-    `code` - the string with the error key 
+    `code` - the string with the error key
 
     `message` - a string describing the error </br>
 
@@ -112,7 +112,7 @@ info:
 
     ## Message buttons
     You can program buttons for users answering a bot.
-    TamTam supports the following types of buttons: 
+    TamTam supports the following types of buttons:
 
     `callback` &mdash; sends a notification to a bot (via WebHook or long polling)
 
@@ -137,7 +137,7 @@ info:
     - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
 
     ##### Version 0.1.7
-    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial 
+    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial
     - Added full `User` object to update types: bot_started, bot_added, bot_removed, user_added, user_removed, chat_title_changed
     - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1503)
     - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1525) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
@@ -1157,6 +1157,12 @@ components:
         description:
           description: Chat description
           nullable: true
+        dialog_with_user:
+          description: Another user in conversation. For `dialog` type chats only
+          allOf:
+            - $ref: '#/components/schemas/UserWithPhoto'
+          nullable: true
+          readOnly: false
       required:
         - chat_id
         - type
@@ -1323,7 +1329,7 @@ components:
       description: Message in chat
       properties:
         sender:
-          description: User that sent this message. Can be `null` if message has been posted on behalf of a channel
+          description: User who sent this message. Can be `null` if message has been posted on behalf of a channel
           allOf:
             - $ref: '#/components/schemas/User'
           readOnly: false
@@ -1675,15 +1681,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/Attachment'
         - properties:
-            callback_id:
-              description: Unique identifier of keyboard
-              type: string
             payload:
               type: object
               allOf:
                 - $ref: '#/components/schemas/Keyboard'
           required:
-            - callback_id
             - payload
     Keyboard:
       description: Keyboard is two-dimension array of buttons
