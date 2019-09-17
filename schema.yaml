@@ -401,6 +401,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
+  '/chats/{chatId}/members/admins':
+    get:
+      tags:
+        - chats
+      operationId: getAdmins
+      summary: Get chat admins
+      description: Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+      parameters:
+        - name: chatId
+          description: Chat identifier
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-\d+
+      responses:
+        '200':
+          description: Administrators list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMembersList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
   '/chats/{chatId}/members':
     get:
       tags:
