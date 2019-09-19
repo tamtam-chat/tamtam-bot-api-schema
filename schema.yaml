@@ -1388,6 +1388,11 @@ components:
             - $ref: '#/components/schemas/MessageStat'
           nullable: true
           readOnly: false
+        url:
+          description: Message public URL. Can be `null` for dialogs or non-public chats/channels
+          type: string
+          nullable: true
+          readOnly: false
       required:
         - recipient
         - body
