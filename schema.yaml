@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.1.8
+  version: 0.1.9
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -83,7 +83,7 @@ info:
     ## Error responses
     In case of an error, the API returns a response with the corresponding HTTP code and JSON with the following fields:
 
-    `code` - the string with the error key 
+    `code` - the string with the error key
 
     `message` - a string describing the error </br>
 
@@ -112,7 +112,7 @@ info:
 
     ## Message buttons
     You can program buttons for users answering a bot.
-    TamTam supports the following types of buttons: 
+    TamTam supports the following types of buttons:
 
     `callback` &mdash; sends a notification to a bot (via WebHook or long polling)
 
@@ -131,16 +131,16 @@ info:
 
     # Changelog
     ##### Version 0.1.8
-    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L2047)
+    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1580)
     - `token` is now only one required property for video/audio/file attachments
-    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1743) are now optional
-    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L2662)
+    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
+    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
 
     ##### Version 0.1.7
-    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial 
+    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial
     - Added full `User` object to update types: bot_started, bot_added, bot_removed, user_added, user_removed, chat_title_changed
-    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1916)
-    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.json#L1957) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
+    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1503)
+    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1525) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
 
     ##### Version 0.1.6
     - Added method to [edit bot info](#operation/editMyInfo)
@@ -393,6 +393,37 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  '/chats/{chatId}/members/admins':
+    get:
+      tags:
+        - chats
+      operationId: getAdmins
+      summary: Get chat admins
+      description: Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+      parameters:
+        - name: chatId
+          description: Chat identifier
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-\d+
+      responses:
+        '200':
+          description: Administrators list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMembersList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -659,9 +690,10 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/bigint'
-        - description: Messages ids you want to get
+        - description: Comma-separated list of message ids to get
           name: message_ids
           in: query
+          style: simple
           schema:
             uniqueItems: true
             items:
@@ -707,7 +739,65 @@ paths:
       tags:
         - messages
       operationId: sendMessage
-      description: "Sends a message to a chat. As a result for this method new message identifier returns.\n### Attaching media\nAttaching media to messages is a three-step process.\n\nAt first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.\n\nAt the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.\n\nFinally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties: \n- `type` with the value set to appropriate media type \n- and `payload` filled with the JSON you've got. \n\nFor example, you can attach a video to message this way:\n\n1. Get URL to upload. Execute following:\n```shell\ncurl -X POST \\\n  'https://botapi.tamtam.chat/uploads?access_token=%access_token%&type=video'\n```\nAs the result it will return URL for the next step.\n```json\n{\n    \"url\": \"http://vu.mycdn.me/upload.do…\"\n}\n```\n\n\n2. Use this url to upload your binary: \n```shell\ncurl -i -X POST \n    -H \"Content-Type: multipart/form-data\" \n    -F \"data=@movie.mp4\" \"http://vu.mycdn.me/upload.do…\"\n```\nAs the result it will return JSON you can attach to message:\n```json\n{\n    \"id\": 1234567890\n}\n```\n3. Send message with attach:\n```json\n{\n\t\"text\": \"Message with video\",\n\t\"attachments\": [\n\t\t{\n\t\t\t\"type\": \"video\",\n\t\t\t\"payload\": {\n\t\t\t    \"id\": 1173574260020\n\t\t\t}\n\t\t}\n\t]\n}\n```\n\n**Important notice**:\n\nIt may take time for the server to process your file (audio/video or any binary). While a file is not processed you can't attach it. It means the last step will fail with `400` error. Try to send a message again until you'll get a successful result."
+      description: |-
+        Sends a message to a chat.
+        As a result for this method new message identifier returns.
+        ### Attaching media
+        Attaching media to messages is a three-step process.
+
+        At first step, you should [obtain a URL to upload](#operation/getUploadUrl) your media files.
+
+        At the second, you should upload binary of appropriate format to URL you obtained at the previous step. See [upload](https://dev.tamtam.chat/#operation/getUploadUrl) section for details.
+
+        Finally, if the upload process was successful, you will receive JSON-object in a response body.  Use this object to create attachment. Construct an object with two properties:
+        - `type` with the value set to appropriate media type
+        - and `payload` filled with the JSON you've got.
+
+        For example, you can attach a video to message this way:
+
+        1. Get URL to upload. Execute following:
+        ```shell
+        curl -X POST 'https://botapi.tamtam.chat/uploads?access_token=%access_token%&type=video'
+        ```
+        As the result it will return URL for the next step.
+        ```json
+        {
+            "url": "http://vu.mycdn.me/upload.do…"
+        }
+        ```
+
+        2. Use this url to upload your binary:
+        ```shell
+        curl -i -X POST
+          -H "Content-Type: multipart/form-data"
+          -F "data=@movie.mp4" "http://vu.mycdn.me/upload.do…"
+        ```
+        As the result it will return JSON you can attach to message:
+        ```json
+          {
+            "token": "_3Rarhcf1PtlMXy8jpgie8Ai_KARnVFYNQTtmIRWNh4"
+          }
+        ```
+        3. Send message with attach:
+        ```json
+        {
+            "text": "Message with video",
+            "attachments": [
+                {
+                    "type": "video",
+                    "payload": {
+                        "token": "_3Rarhcf1PtlMXy8jpgie8Ai_KARnVFYNQTtmIRWNh4"
+                    }
+                }
+            ]
+        }
+        ```
+
+        **Important notice**:
+
+        It may take time for the server to process your file (audio/video or any binary).
+        While a file is not processed you can't attach it. It means the last step will fail with `400` error.
+        Try to send a message again until you'll get a successful result.
       summary: Send message
       parameters:
         - name: user_id
@@ -754,7 +844,7 @@ paths:
           in: query
           schema:
             type: string
-            pattern: 'mid\.[a-z0-9]{32}'
+            minLength: 1
       requestBody:
         required: true
         content:
@@ -782,7 +872,7 @@ paths:
           in: query
           schema:
             type: string
-            pattern: 'mid\.[a-z0-9]{32}'
+            minLength: 1
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
@@ -831,7 +921,8 @@ paths:
 
         Every update has its own sequence number. `marker` property in response points to the next upcoming update.
 
-        All previous updates are considered as *committed* after passing `marker` parameter. If `marker` parameter is **not passed**, your bot will get all updates happened before the last commitment.
+        All previous updates are considered as *committed* after passing `marker` parameter.
+        If `marker` parameter is **not passed**, your bot will get all updates happened after the last commitment.
       summary: Get updates
       parameters:
         - name: limit
@@ -994,7 +1085,7 @@ components:
         username:
           description: 'Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: "-" or "_". It **must** starts with a letter'
           type: string
-          pattern: '[a-z]+[a-z0-9-_]*'
+          pattern: '[a-zA-Z]+[a-zA-Z0-9-_]*'
           readOnly: false
           minLength: 4
           maxLength: 64
@@ -1097,6 +1188,12 @@ components:
         description:
           description: Chat description
           nullable: true
+        dialog_with_user:
+          description: Another user in conversation. For `dialog` type chats only
+          allOf:
+            - $ref: '#/components/schemas/UserWithPhoto'
+          nullable: true
+          readOnly: false
       required:
         - chat_id
         - type
@@ -1263,7 +1360,7 @@ components:
       description: Message in chat
       properties:
         sender:
-          description: User that sent this message. Can be `null` if message has been posted on behalf of a channel
+          description: User who sent this message. Can be `null` if message has been posted on behalf of a channel
           allOf:
             - $ref: '#/components/schemas/User'
           readOnly: false
@@ -1289,6 +1386,11 @@ components:
           description: 'Message statistics. Available only for channels in [GET:/messages](#operation/getMessages) context'
           allOf:
             - $ref: '#/components/schemas/MessageStat'
+          nullable: true
+          readOnly: false
+        url:
+          description: Message public URL. Can be `null` for dialogs or non-public chats/channels
+          type: string
           nullable: true
           readOnly: false
       required:
@@ -1615,15 +1717,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/Attachment'
         - properties:
-            callback_id:
-              description: Unique identifier of keyboard
-              type: string
             payload:
               type: object
               allOf:
                 - $ref: '#/components/schemas/Keyboard'
           required:
-            - callback_id
             - payload
     Keyboard:
       description: Keyboard is two-dimension array of buttons
@@ -1972,10 +2070,6 @@ components:
     CallbackAnswer:
       description: Send this object when your bot wants to react to when a button is pressed
       properties:
-        user_id:
-          type: integer
-          format: int64
-          readOnly: false
         message:
           description: Fill this if you want to modify current message
           nullable: true
@@ -2029,7 +2123,6 @@ components:
       description: Different actions to send to chat members
       enum:
         - typing_on
-        - typing_off
         - sending_photo
         - sending_video
         - sending_audio
@@ -2170,13 +2263,14 @@ components:
               allOf:
                 - $ref: '#/components/schemas/User'
             inviter_id:
-              description: User who added user to chat
+              description: User who added user to chat. Can be `null` in case when user joined chat by link
               type: integer
               format: int64
+              readOnly: false
+              nullable: true
           required:
             - chat_id
             - user
-            - inviter_id
     UserRemovedFromChatUpdate:
       description: You will receive this update when user has been removed from chat where bot is administrator
       allOf:
@@ -2191,13 +2285,13 @@ components:
               allOf:
                 - $ref: '#/components/schemas/User'
             admin_id:
-              description: Administrator who removed user from chat
+              description: Administrator who removed user from chat. Can be `null` in case when user left chat
               type: integer
               format: int64
+              readOnly: false
           required:
             - chat_id
             - user
-            - admin_id
     BotStartedUpdate:
       description: Bot gets this type of update as soon as user pressed `Start` button
       allOf:
