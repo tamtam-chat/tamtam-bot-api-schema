@@ -2123,7 +2123,6 @@ components:
       description: Different actions to send to chat members
       enum:
         - typing_on
-        - typing_off
         - sending_photo
         - sending_video
         - sending_audio
