@@ -2306,12 +2306,6 @@ components:
               description: User pressed the 'Start' button
               allOf:
                 - $ref: '#/components/schemas/User'
-            payload:
-              description: Additional data from deep-link passed on startup
-              type: string
-              maxLength: 512
-              nullable: true
-              readOnly: false
           required:
             - chat_id
             - user
