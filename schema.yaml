@@ -1416,12 +1416,6 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/Attachment'
-        reply_to:
-          deprecated: true
-          description: 'In case this message is reply to another, it is the unique identifier of the replied message'
-          type: string
-          nullable: true
-          readOnly: false
       required:
         - mid
         - seq
@@ -1445,17 +1439,6 @@ components:
           type: string
           maxLength: 4000
           nullable: true
-        attachment:
-          description: |-
-            Use `attachments` property instead. Will be removed in the next major release.
-
-            Single message attachment
-          deprecated: true
-          type: object
-          nullable: true
-          readOnly: false
-          allOf:
-            - $ref: '#/components/schemas/AttachmentRequest'
         attachments:
           description: Message attachments. See `AttachmentRequest` and it's inheritors for full information
           type: array
@@ -1469,7 +1452,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/NewMessageLink'
         notify:
-          description: 'If false, chat participants wouldn''t be notified'
+          description: 'If false, chat participants would not be notified'
           type: boolean
           default: true
           readOnly: false
