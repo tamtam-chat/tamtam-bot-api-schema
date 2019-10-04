@@ -805,6 +805,13 @@ paths:
             format: int64
           in: query
           required: false
+        - name: disable_link_preview
+          description: "If `true`, server will generate media preview for links in text"
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
       requestBody:
         required: true
         content:
