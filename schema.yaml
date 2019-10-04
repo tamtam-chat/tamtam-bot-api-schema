@@ -1678,6 +1678,23 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/AttachmentPayload'
+            title:
+              description: Link preview title
+              type: string
+              readOnly: false
+              nullable: true
+            description:
+              description: Link preview description
+              type: string
+              readOnly: false
+              nullable: true
+            image:
+              description: Link preview image
+              type: object
+              nullable: true
+              readOnly: false
+              allOf:
+                - $ref: '#/components/schemas/PhotoAttachment'
           required:
             - payload
     LocationAttachment:
