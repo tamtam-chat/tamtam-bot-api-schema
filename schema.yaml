@@ -407,7 +407,7 @@ paths:
           schema:
             type: integer
             format: int64
-            pattern: \-\d+
+            pattern: \-?\d+
       responses:
         '200':
           description: Administrators list
@@ -1910,7 +1910,7 @@ components:
     UploadType:
       description: Type of file uploading
       enum:
-        - photo
+        - image
         - video
         - audio
         - file
