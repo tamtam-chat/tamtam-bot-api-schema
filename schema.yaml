@@ -806,7 +806,7 @@ paths:
           in: query
           required: false
         - name: disable_link_preview
-          description: "If `true`, server will generate media preview for links in text"
+          description: "If `false`, server will not generate media preview for links in text"
           in: query
           required: false
           schema:
