@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.1.9
+  version: 0.1.10
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -130,6 +130,14 @@ info:
     We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
 
     # Changelog
+    ##### Version 0.1.9
+    - Added method to [get chat administrators](#operation/getAdmins)
+    - For `type: dialog` chats [added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a#diff-7e9de78f42fb0d2ae80878b90c87300aR1160) `dialog_with_user`
+    - Added `url` for [messages](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/137dd9dfa4e583d429f017ba69c20caa9deac105) in public chats/channels
+    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a) `callback_id` of `InlineKeyboardAttachment`
+    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/2ebf36b22758ea3487304f5b0d0d811798e78b61) `user_id` of `CallbackAnswer`. It is no longer required. Just use `callback_id` of `Callback`
+    - Several minor improvements: check [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/beccbe5f4fbed32182a13e257ca1cfae7f40ea8d...master) for all changes
+
     ##### Version 0.1.8
     - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1580)
     - `token` is now only one required property for video/audio/file attachments
@@ -146,23 +154,6 @@ info:
     - Added method to [edit bot info](#operation/editMyInfo)
     - Added statistics for messages in channel
     - `Message.sender` and `UserWithPhoto.avatar_url/full_avatar_url` removed from required properties
-
-    ##### Version 0.1.5
-    - Added `id` property to media attachments (`VideoAttachment`, `AudioAttachment`) so you can reuse attachment from one message in another
-    - Added ability to create *linked* message: replied or forwarded. See `link` in `NewMessageBody`
-    - `intent` property marked as required only for `CallbackButton`
-
-    ##### Version 0.1.4
-    - Added `user_ids` parameter to [get members](#operation/getMembers) in chat by id
-    - `attachment` property of [send message](#operation/sendMessage) request body marked as deprecated
-
-    ##### Version 0.1.3
-    - Added method to [delete](https://dev.tamtam.chat/#operation/deleteMessages) messages
-    - Added ability to [get](https://dev.tamtam.chat/#operation/getMessages) particular messages by ID
-    - Added `is_admin` flag to `ChatMember`
-    - Added `message` property to `MessageCallbackUpdate`
-    - Renamed property `message` to `body` for `Message` schema
-    - Added reusable `token` to `PhotoAttachment`. It allows to attach the same photo more than once.
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
@@ -416,7 +407,7 @@ paths:
           schema:
             type: integer
             format: int64
-            pattern: \-\d+
+            pattern: \-?\d+
       responses:
         '200':
           description: Administrators list
@@ -814,6 +805,13 @@ paths:
             format: int64
           in: query
           required: false
+        - name: disable_link_preview
+          description: "If `false`, server will not generate media preview for links in text"
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
       requestBody:
         required: true
         content:
@@ -1296,9 +1294,9 @@ components:
           type: integer
           format: int64
           nullable: true
+          readOnly: false
       required:
         - members
-        - marker
     Image:
       description: Generic schema describing image object
       properties:
@@ -1425,12 +1423,6 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/Attachment'
-        reply_to:
-          deprecated: true
-          description: 'In case this message is reply to another, it is the unique identifier of the replied message'
-          type: string
-          nullable: true
-          readOnly: false
       required:
         - mid
         - seq
@@ -1454,17 +1446,6 @@ components:
           type: string
           maxLength: 4000
           nullable: true
-        attachment:
-          description: |-
-            Use `attachments` property instead. Will be removed in the next major release.
-
-            Single message attachment
-          deprecated: true
-          type: object
-          nullable: true
-          readOnly: false
-          allOf:
-            - $ref: '#/components/schemas/AttachmentRequest'
         attachments:
           description: Message attachments. See `AttachmentRequest` and it's inheritors for full information
           type: array
@@ -1478,7 +1459,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/NewMessageLink'
         notify:
-          description: 'If false, chat participants wouldn''t be notified'
+          description: 'If false, chat participants would not be notified'
           type: boolean
           default: true
           readOnly: false
@@ -1697,6 +1678,23 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/AttachmentPayload'
+            title:
+              description: Link preview title
+              type: string
+              readOnly: false
+              nullable: true
+            description:
+              description: Link preview description
+              type: string
+              readOnly: false
+              nullable: true
+            image:
+              description: Link preview image
+              type: object
+              nullable: true
+              readOnly: false
+              allOf:
+                - $ref: '#/components/schemas/PhotoAttachment'
           required:
             - payload
     LocationAttachment:
@@ -1912,7 +1910,7 @@ components:
     UploadType:
       description: Type of file uploading
       enum:
-        - photo
+        - image
         - video
         - audio
         - file
@@ -2126,6 +2124,7 @@ components:
         - sending_photo
         - sending_video
         - sending_audio
+        - sending_file
         - mark_seen
     UpdateList:
       description: List of all updates in chats your bot participated in
