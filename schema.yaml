@@ -1631,18 +1631,17 @@ components:
             - payload
     ContactAttachmentPayload:
       properties:
-        vcfInfo:
+        vcf_info:
           description: User info in VCF format
           nullable: true
+          readOnly: false
           type: string
-        tamInfo:
+        tam_info:
           description: User info
           nullable: true
+          readOnly: false
           allOf:
             - $ref: '#/components/schemas/User'
-      required:
-        - vcfInfo
-        - tamInfo
     StickerAttachmentPayload:
       allOf:
         - $ref: '#/components/schemas/AttachmentPayload'
@@ -1930,24 +1929,24 @@ components:
           description: Contact name
           nullable: true
           type: string
-        contactId:
-          description: Contact identifier
+        contact_id:
+          description: Contact identifier if it is reigstered TamTam user
           nullable: true
+          readOnly: false
           type: integer
           format: int64
-        vcfInfo:
+        vcf_info:
           description: Full information about contact in VCF format
           nullable: true
+          readOnly: false
           type: string
-        vcfPhone:
+        vcf_phone:
           description: Contact phone in VCF format
+          readOnly: false
           nullable: true
           type: string
       required:
         - name
-        - contactId
-        - vcfInfo
-        - vcfPhone
     StickerAttachmentRequest:
       description: Request to attach sticker. MUST be the only attachment request in message
       allOf:
