@@ -1687,13 +1687,11 @@ components:
               type: string
               readOnly: false
               nullable: true
-            image:
+            image_url:
               description: Link preview image
-              type: object
+              type: string
               nullable: true
               readOnly: false
-              allOf:
-                - $ref: '#/components/schemas/PhotoAttachment'
           required:
             - payload
     LocationAttachment:
