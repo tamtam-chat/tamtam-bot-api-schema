@@ -1192,6 +1192,11 @@ components:
             - $ref: '#/components/schemas/UserWithPhoto'
           nullable: true
           readOnly: false
+        messages_count:
+          description: Messages count in chat. Only for group chats and channels. **Not available** for dialogs
+          nullable: true
+          readOnly: false
+          type: integer
       required:
         - chat_id
         - type
