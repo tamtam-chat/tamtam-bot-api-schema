@@ -1197,6 +1197,11 @@ components:
           nullable: true
           readOnly: false
           type: integer
+        chat_message_id:
+          description: Identifier of message that contains `chat` button initialized chat
+          nullable: true
+          readOnly: false
+          type: string
       required:
         - chat_id
         - type
@@ -1749,6 +1754,7 @@ components:
           link: '#/components/schemas/LinkButton'
           request_geo_location: '#/components/schemas/RequestGeoLocationButton'
           request_contact: '#/components/schemas/RequestContactButton'
+          chat: '#/components/schemas/ChatButton'
       required:
         - type
         - text
@@ -1794,6 +1800,41 @@ components:
               readOnly: false
               type: boolean
               default: false
+    ChatButton:
+      description: |-
+        Button that creates new chat as soon as the first user clicked on it.
+        Bot will be added to chat participants as administrator.
+        Message author will be owner of the chat.
+      allOf:
+        - $ref: '#/components/schemas/Button'
+        - properties:
+            chat_title:
+              description: 'Title of chat to be created'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 200
+            chat_description:
+              description: 'Chat description'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 400
+            start_payload:
+              description: 'Start payload will be sent to bot as soon as chat created'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 512
+            uuid:
+              description: |-
+                Unique button identifier across all chat buttons in keyboard.
+                If `uuid` changed, new chat will be created on the next click.
+                Server will generate it at the time when button initially posted.
+                Reuse it when you edit the message.'
+              readOnly: false
+              nullable: true
+              type: integer
     Intent:
       description: Intent of button
       type: string
@@ -2159,6 +2200,7 @@ components:
           user_removed: '#/components/schemas/UserRemovedFromChatUpdate'
           bot_started: '#/components/schemas/BotStartedUpdate'
           chat_title_changed: '#/components/schemas/ChatTitleChangedUpdate'
+          message_chat_created: '#/components/schemas/MessageChatCreatedUpdate'
       properties:
         update_type:
           type: string
@@ -2329,3 +2371,22 @@ components:
             - chat_id
             - user
             - title
+    MessageChatCreatedUpdate:
+      description: Bot will get this update when chat has been created as soon as first user clicked chat button
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            chat:
+              description: Created chat
+              $ref: '#/components/schemas/Chat'
+            message_id:
+              description: Message identifier where the button has been clicked
+              type: string
+            start_payload:
+              description: Payload from chat button
+              type: string
+              nullable: true
+              readOnly: false
+          required:
+            - message_id
+            - chat
