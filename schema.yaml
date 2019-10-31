@@ -2247,8 +2247,18 @@ components:
             message_id:
               description: Identifier of removed message
               type: string
+            chat_id:
+              description: Chat identifier where message has been deleted
+              type: integer
+              format: int64
+            user_id:
+              description: User who deleted this message
+              type: integer
+              format: int64
           required:
             - message_id
+            - chat_id
+            - user_id
     MessageEditedUpdate:
       description: You will get this `update` as soon as message is edited
       allOf:
