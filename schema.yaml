@@ -29,27 +29,6 @@ info:
     [PrimeBot](https://tt.me/primebot) is the main bot in TamTam, all bots creator. Use PrimeBot to create and edit
     your bots. Feel free to contact us for any questions, [@support](https://tt.me/support) or [team@tamtam.chat](mailto:team@tamtam.chat).
 
-    #### [PrimeBot](https://tt.me/primebot) commands:
-    `/start` &mdash; start a dialog with a bot
-
-    `/create` &mdash; create a bot, assign the unique short name to it (from 4 to 64 characters)
-
-    `/set_name [name]` &mdash; assign a short or full name to the bot (up to 200 characters)
-
-    `/set_description [description]` &mdash; enter the description for the bot profile (up to 400 characters)
-
-    `/set_picture [URL]` &mdash; enter the URL of bot's picture
-
-    `/delete [username]` &mdash; delete the bot
-
-    `/list` &mdash; show the list of all bots
-
-    `/get_token` &mdash; obtain a token for a bot
-
-    `/revoke` &mdash; request a new token
-
-    `/help` &mdash; help
-
     ## HTTP verbs
     `GET` &mdash; getting resources, parameters are transmitted via URL
 
@@ -130,6 +109,12 @@ info:
     We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
 
     # Changelog
+    ##### Version 0.1.10
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/a9ef3a1b8f4e1a75b55a9b80877eddc2c6f07ec4) `disable_link_preview` parameter to POST:/messages method to disable links parsing in text
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/eb99e8ab97b55fa196d9957fca34d2316a4ca8aa) `sending_file` action
+    - [Removed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/7a5ab5f0ea1336b3460d1827a6a7b3b141e19776) several deprecated properties
+    - `photo` upload type [renamed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/74505883e6acb306686a6d141414aeaf5131ef49) to `image`. *C* is for consistency
+
     ##### Version 0.1.9
     - Added method to [get chat administrators](#operation/getAdmins)
     - For `type: dialog` chats [added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a#diff-7e9de78f42fb0d2ae80878b90c87300aR1160) `dialog_with_user`
@@ -144,16 +129,7 @@ info:
     - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
     - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
 
-    ##### Version 0.1.7
-    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial
-    - Added full `User` object to update types: bot_started, bot_added, bot_removed, user_added, user_removed, chat_title_changed
-    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1503)
-    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1525) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
-
-    ##### Version 0.1.6
-    - Added method to [edit bot info](#operation/editMyInfo)
-    - Added statistics for messages in channel
-    - `Message.sender` and `UserWithPhoto.avatar_url/full_avatar_url` removed from required properties
+    To see changelog for older versions visit our [GitHub](https://github.com/tamtam-chat/tamtam-bot-api-schema/releases).
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
