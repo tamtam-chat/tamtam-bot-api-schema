@@ -513,6 +513,13 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: block
+          description: Set to `true` if user should be blocked in chat
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
