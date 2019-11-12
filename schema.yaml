@@ -962,6 +962,36 @@ paths:
           $ref: '#/components/responses/NotAllowed'
         '500':
           $ref: '#/components/responses/InternalError'
+  /answers/constructor:
+    post:
+      tags:
+        - messages
+      operationId: construct
+      description: |-
+        Sends answer on construction request. Answer can contain any prepared message and/or keyboard to help user interact with bot.
+      summary: Construct message
+      parameters:
+        - name: session_id
+          description: Constructor session identifier
+          required: true
+          in: query
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConstructorAnswer'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /updates:
     get:
       operationId: getUpdates
@@ -1454,8 +1484,39 @@ components:
           type: string
           nullable: true
           readOnly: false
+        constructor:
+          description: Bot-constructor created this message
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/User'
       required:
         - recipient
+        - body
+        - timestamp
+    ConstructedMessage:
+      description: Message constructed i in chat
+      properties:
+        sender:
+          description: User who sent this message
+          allOf:
+            - $ref: '#/components/schemas/User'
+        timestamp:
+          description: Unix-time when message has been created
+          type: integer
+          format: int64
+        link:
+          description: 'Any linked message: forward or reply'
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/LinkedMessage'
+        body:
+          description: Body of created message. Text + attachments
+          allOf:
+            - $ref: '#/components/schemas/MessageBody'
+      required:
+        - sender
         - body
         - timestamp
     MessageStat:
@@ -1626,6 +1687,28 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/MediaAttachmentPayload'
+            thumbnail:
+              description: Video thumbnail
+              type: string
+              nullable: true
+              readOnly: false
+              allOf:
+                - $ref: '#/components/schemas/PhotoAttachmentPayload'
+            width:
+              description: Video width
+              type: integer
+              nullable: true
+              readOnly: false
+            height:
+              description: Video height
+              type: integer
+              nullable: true
+              readOnly: false
+            duration:
+              description: Video duration in seconds
+              type: integer
+              nullable: true
+              readOnly: false
           required:
             - payload
     AudioAttachment:
@@ -2175,6 +2258,42 @@ components:
           nullable: true
           readOnly: false
           type: string
+    ConstructorAnswer:
+      description: Bot's answer on construction request
+      properties:
+        messages:
+          type: array
+          description: Array of prepared messages. This messages will be sent as user taps on "Send" button
+          readOnly: false
+          items:
+            $ref: '#/components/schemas/NewMessageBody'
+        allow_user_input:
+          description: 'If `true` user can send any input manually. Otherwise, only keyboard will be shown'
+          type: boolean
+          readOnly: false
+        hint:
+          description: 'Hint to user. Will be shown on top of keyboard'
+          nullable: true
+          readOnly: false
+          type: string
+        data:
+          description: |-
+            In this property you can store any additional data up to 4KB. We send this data back to bot within the
+            next construction request. It is handy to store here any state of construction session
+          type: string,
+          readOnly: false
+          maxLength: 4096
+        keyboard:
+          description: 'Keyboard to show to user in constructor mode'
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/Keyboard'
+        placeholder:
+          nullable: true
+          readOnly: false
+          description: 'Text to show over the text field of TamTam clients'
+          type: string
     Error:
       description: Server returns this if there was an exception to your request
       properties:
@@ -2253,6 +2372,8 @@ components:
           user_removed: '#/components/schemas/UserRemovedFromChatUpdate'
           bot_started: '#/components/schemas/BotStartedUpdate'
           chat_title_changed: '#/components/schemas/ChatTitleChangedUpdate'
+          message_construction_request: '#/components/schemas/MessageConstructionRequest'
+          message_constructed: '#/components/schemas/MessageConstructedUpdate'
           message_chat_created: '#/components/schemas/MessageChatCreatedUpdate'
       properties:
         update_type:
@@ -2440,6 +2561,85 @@ components:
             - chat_id
             - user
             - title
+    MessageConstructionRequest:
+      description: Bot will get this update when user sent to bot any message or pressed button during construction process
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            user:
+              description: User who initiated this request
+              allOf:
+                - $ref: '#/components/schemas/UserWithPhoto'
+            user_locale:
+              description: Current user locale in IETF BCP 47 format
+              type: string
+              readOnly: false
+            session_id:
+              description: Constructor session identifier
+              type: string
+            data:
+              description: data received from previous `ConstructorAnswer`
+              type: string
+              readOnly: false
+              nullable: true
+              maxLength: 4096
+            input:
+              description: User's input. It can be message (text/attachments) or simple button's callback
+              allOf:
+                - $ref: '#/components/schemas/ConstructorInput'
+          required:
+            - user
+            - session_id
+            - input
+    ConstructorInput:
+      description: It can be either message (text/attachments) or button callback
+      discriminator:
+        propertyName: input_type
+        mapping:
+          callback: '#/components/schemas/CallbackConstructorInput'
+          message: '#/components/schemas/MessageConstructorInput'
+      properties:
+        input_type:
+          type: string
+      required:
+        - input_type
+    CallbackConstructorInput:
+      description: Bot will get this input as soon as soon user taps on button created by bot in construction mode
+      allOf:
+        - $ref: '#/components/schemas/ConstructorInput'
+        - properties:
+            payload:
+              description: Pressed button payload
+              type: string
+          required:
+            - payload
+    MessageConstructorInput:
+      description: Bot will get this input in case when user sends message to bot manually
+      allOf:
+        - $ref: '#/components/schemas/ConstructorInput'
+        - properties:
+            messages:
+              description: Messages sent by user during construction process. Typically it is single element array but sometimes it can contains multiple messages. Can be empty on initial request when user just opened constructor
+              type: array
+              nullable: true
+              items:
+                $ref: '#/components/schemas/NewMessageBody'
+          required:
+            - messages
+    MessageConstructedUpdate:
+      description: Bot will get this update when constructed message has been posted to any chat
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            session_id:
+              description: Constructor session identifier
+              type: string
+            message:
+              description: User message
+              $ref: '#/components/schemas/ConstructedMessage'
+          required:
+            - session_id
+            - message
     MessageChatCreatedUpdate:
       description: Bot will get this update when chat has been created as soon as first user clicked chat button
       allOf:
