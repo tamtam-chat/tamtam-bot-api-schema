@@ -514,7 +514,9 @@ paths:
             type: integer
             format: int64
         - name: block
-          description: Set to `true` if user should be blocked in chat
+          description: |-
+            Set to `true` if user should be blocked in chat.
+            Applicable only for chats that have public or private link. Ignored otherwise
           required: false
           in: query
           schema:
