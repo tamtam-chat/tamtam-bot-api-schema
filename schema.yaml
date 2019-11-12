@@ -93,13 +93,81 @@ info:
     You can program buttons for users answering a bot.
     TamTam supports the following types of buttons:
 
-    `callback` &mdash; sends a notification to a bot (via WebHook or long polling)
+    `callback` &mdash; sends a notification with payload to a bot (via WebHook or long polling)
 
     `link` &mdash; makes a user to follow a link
 
     `request_contact` &mdash; requests the user permission to access contact information (phone number, short link, email)
 
-    You may also send a message with an [InlineKeyboard]() type attachment to start creating buttons. When the user presses a button, the bot receives the answer with filled callback field. It is recommended to edit that message so the user can receive updated buttons.
+    `request_geo_location` &mdash; asks user to provide current geo location
+
+    `chat` &mdash; creates chat associated with message
+
+    To start create buttons [send message](#operation/sendMessage) with `InlineKeyboardAttachment`:
+    ```json
+    {
+      "text": "It is message with inline keyboard",
+      "attachments": [
+        {
+          "type": "inline_keyboard",
+          "payload": {
+            "buttons": [
+              [
+                {
+                  "type": "callback",
+                  "text": "Press me!",
+                  "payload": "button1 pressed"
+                }
+              ],
+              [
+                {
+                  "type": "chat",
+                  "text": "Discuss",
+                  "chat_title": "Message discussion"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+    ```
+    ### Chat button
+    Chat button is a button that starts chat assosiated with the current message. It will be **private** chat with a link, bot will be added as administrator by default.
+
+    Chat will be created as soon as the first user taps on button. Bot will receive `message_chat_created` update.
+
+    Bot can set title and description of new chat by setting `chat_title` and `chat_description` properties.
+
+    Whereas keyboard can contain several `chat`-buttons there is `uuid` property to distinct them between each other.
+    In case you do not pass `uuid` we will generate it. If you edit message, pass `uuid` so we know that this button starts the same chat as before.
+
+    Chat button also can contain `start_payload` that will be sent to bot as part of `message_chat_created` update.
+
+    ## Deep linking
+    TamTam supports deep linking mechanism for bots. It allows passing additional payload to the bot on startup.
+    Deep link can contain any data encoded into string up to **128** characters long. Longer strings will be omitted and **not** passed to the bot.
+
+    Each bot has start link that looks like:
+    ```
+    https://tt.me/%BOT_USERNAME%/start/%PAYLOAD%
+    ```
+    As soon as user clicks on such link we open dialog with bot and send this payload to bot as part of `bot_started` update:
+    ```json
+    {
+        "update_type": "bot_started",
+        "timestamp": 1573226679188,
+        "chat_id": 1234567890,
+        "user": {
+            "user_id": 1234567890,
+            "name": "Boris",
+            "username": "borisd84"
+        },
+        "payload": "any data meaningful to bot"
+    }
+    ```
+
+    Deep linking mechanism is supported for iOS version 2.7.0 and Android 2.9.0 and higher.
 
     # Versioning
     API models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.
@@ -374,7 +442,7 @@ paths:
         - chats
       operationId: getAdmins
       summary: Get chat admins
-      description: Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+      description: Returns all chat administrators. Bot must be **administrator** in requested chat.
       parameters:
         - name: chatId
           description: Chat identifier
