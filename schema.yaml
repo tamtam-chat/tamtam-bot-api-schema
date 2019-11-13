@@ -2278,11 +2278,11 @@ components:
           type: string
         data:
           description: |-
-            In this property you can store any additional data up to 4KB. We send this data back to bot within the
+            In this property you can store any additional data up to 8KB. We send this data back to bot within the
             next construction request. It is handy to store here any state of construction session
           type: string,
           readOnly: false
-          maxLength: 4096
+          maxLength: 8192
         keyboard:
           description: 'Keyboard to show to user in constructor mode'
           nullable: true
@@ -2292,7 +2292,7 @@ components:
         placeholder:
           nullable: true
           readOnly: false
-          description: 'Text to show over the text field of TamTam clients'
+          description: 'Text to show over the text field'
           type: string
     Error:
       description: Server returns this if there was an exception to your request
