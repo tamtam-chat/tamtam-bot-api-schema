@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.1.10
+  version: 0.1.11
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -28,27 +28,6 @@ info:
     ## @PrimeBot
     [PrimeBot](https://tt.me/primebot) is the main bot in TamTam, all bots creator. Use PrimeBot to create and edit
     your bots. Feel free to contact us for any questions, [@support](https://tt.me/support) or [team@tamtam.chat](mailto:team@tamtam.chat).
-
-    #### [PrimeBot](https://tt.me/primebot) commands:
-    `/start` &mdash; start a dialog with a bot
-
-    `/create` &mdash; create a bot, assign the unique short name to it (from 4 to 64 characters)
-
-    `/set_name [name]` &mdash; assign a short or full name to the bot (up to 200 characters)
-
-    `/set_description [description]` &mdash; enter the description for the bot profile (up to 400 characters)
-
-    `/set_picture [URL]` &mdash; enter the URL of bot's picture
-
-    `/delete [username]` &mdash; delete the bot
-
-    `/list` &mdash; show the list of all bots
-
-    `/get_token` &mdash; obtain a token for a bot
-
-    `/revoke` &mdash; request a new token
-
-    `/help` &mdash; help
 
     ## HTTP verbs
     `GET` &mdash; getting resources, parameters are transmitted via URL
@@ -114,13 +93,81 @@ info:
     You can program buttons for users answering a bot.
     TamTam supports the following types of buttons:
 
-    `callback` &mdash; sends a notification to a bot (via WebHook or long polling)
+    `callback` &mdash; sends a notification with payload to a bot (via WebHook or long polling)
 
     `link` &mdash; makes a user to follow a link
 
     `request_contact` &mdash; requests the user permission to access contact information (phone number, short link, email)
 
-    You may also send a message with an [InlineKeyboard]() type attachment to start creating buttons. When the user presses a button, the bot receives the answer with filled callback field. It is recommended to edit that message so the user can receive updated buttons.
+    `request_geo_location` &mdash; asks user to provide current geo location
+
+    `chat` &mdash; creates chat associated with message
+
+    To start create buttons [send message](#operation/sendMessage) with `InlineKeyboardAttachment`:
+    ```json
+    {
+      "text": "It is message with inline keyboard",
+      "attachments": [
+        {
+          "type": "inline_keyboard",
+          "payload": {
+            "buttons": [
+              [
+                {
+                  "type": "callback",
+                  "text": "Press me!",
+                  "payload": "button1 pressed"
+                }
+              ],
+              [
+                {
+                  "type": "chat",
+                  "text": "Discuss",
+                  "chat_title": "Message discussion"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+    ```
+    ### Chat button
+    Chat button is a button that starts chat assosiated with the current message. It will be **private** chat with a link, bot will be added as administrator by default.
+
+    Chat will be created as soon as the first user taps on button. Bot will receive `message_chat_created` update.
+
+    Bot can set title and description of new chat by setting `chat_title` and `chat_description` properties.
+
+    Whereas keyboard can contain several `chat`-buttons there is `uuid` property to distinct them between each other.
+    In case you do not pass `uuid` we will generate it. If you edit message, pass `uuid` so we know that this button starts the same chat as before.
+
+    Chat button also can contain `start_payload` that will be sent to bot as part of `message_chat_created` update.
+
+    ## Deep linking
+    TamTam supports deep linking mechanism for bots. It allows passing additional payload to the bot on startup.
+    Deep link can contain any data encoded into string up to **128** characters long. Longer strings will be omitted and **not** passed to the bot.
+
+    Each bot has start link that looks like:
+    ```
+    https://tt.me/%BOT_USERNAME%/start/%PAYLOAD%
+    ```
+    As soon as user clicks on such link we open dialog with bot and send this payload to bot as part of `bot_started` update:
+    ```json
+    {
+        "update_type": "bot_started",
+        "timestamp": 1573226679188,
+        "chat_id": 1234567890,
+        "user": {
+            "user_id": 1234567890,
+            "name": "Boris",
+            "username": "borisd84"
+        },
+        "payload": "any data meaningful to bot"
+    }
+    ```
+
+    Deep linking mechanism is supported for iOS version 2.7.0 and Android 2.9.0 and higher.
 
     # Versioning
     API models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.
@@ -130,6 +177,12 @@ info:
     We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
 
     # Changelog
+    ##### Version 0.1.10
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/a9ef3a1b8f4e1a75b55a9b80877eddc2c6f07ec4) `disable_link_preview` parameter to POST:/messages method to disable links parsing in text
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/eb99e8ab97b55fa196d9957fca34d2316a4ca8aa) `sending_file` action
+    - [Removed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/7a5ab5f0ea1336b3460d1827a6a7b3b141e19776) several deprecated properties
+    - `photo` upload type [renamed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/74505883e6acb306686a6d141414aeaf5131ef49) to `image`. *C* is for consistency
+
     ##### Version 0.1.9
     - Added method to [get chat administrators](#operation/getAdmins)
     - For `type: dialog` chats [added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a#diff-7e9de78f42fb0d2ae80878b90c87300aR1160) `dialog_with_user`
@@ -144,16 +197,7 @@ info:
     - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
     - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
 
-    ##### Version 0.1.7
-    - It is now **required** to pass `marker` parameter in [/updates](#operation/getUpdates) requests, except initial
-    - Added full `User` object to update types: bot_started, bot_added, bot_removed, user_added, user_removed, chat_title_changed
-    - Added `size` and `filename` to [`FileAttachment`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1503)
-    - Added [`token`](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1525) property to video/audio/file attachments allows you to reuse attachments uploaded by another user
-
-    ##### Version 0.1.6
-    - Added method to [edit bot info](#operation/editMyInfo)
-    - Added statistics for messages in channel
-    - `Message.sender` and `UserWithPhoto.avatar_url/full_avatar_url` removed from required properties
+    To see changelog for older versions visit our [GitHub](https://github.com/tamtam-chat/tamtam-bot-api-schema/releases).
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
@@ -398,7 +442,7 @@ paths:
         - chats
       operationId: getAdmins
       summary: Get chat admins
-      description: Returns all chat administrators. Bot must be **adminstrator** in requested chat.
+      description: Returns all chat administrators. Bot must be **administrator** in requested chat.
       parameters:
         - name: chatId
           description: Chat identifier
@@ -537,6 +581,15 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: block
+          description: |-
+            Set to `true` if user should be blocked in chat.
+            Applicable only for chats that have public or private link. Ignored otherwise
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
@@ -909,6 +962,36 @@ paths:
           $ref: '#/components/responses/NotAllowed'
         '500':
           $ref: '#/components/responses/InternalError'
+  /answers/constructor:
+    post:
+      tags:
+        - messages
+      operationId: construct
+      description: |-
+        Sends answer on construction request. Answer can contain any prepared message and/or keyboard to help user interact with bot.
+      summary: Construct message
+      parameters:
+        - name: session_id
+          description: Constructor session identifier
+          required: true
+          in: query
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConstructorAnswer'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /updates:
     get:
       operationId: getUpdates
@@ -1192,6 +1275,16 @@ components:
             - $ref: '#/components/schemas/UserWithPhoto'
           nullable: true
           readOnly: false
+        messages_count:
+          description: Messages count in chat. Only for group chats and channels. **Not available** for dialogs
+          nullable: true
+          readOnly: false
+          type: integer
+        chat_message_id:
+          description: Identifier of message that contains `chat` button initialized chat
+          nullable: true
+          readOnly: false
+          type: string
       required:
         - chat_id
         - type
@@ -1391,8 +1484,39 @@ components:
           type: string
           nullable: true
           readOnly: false
+        constructor:
+          description: Bot-constructor created this message
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/User'
       required:
         - recipient
+        - body
+        - timestamp
+    ConstructedMessage:
+      description: Message constructed i in chat
+      properties:
+        sender:
+          description: User who sent this message
+          allOf:
+            - $ref: '#/components/schemas/User'
+        timestamp:
+          description: Unix-time when message has been created
+          type: integer
+          format: int64
+        link:
+          description: 'Any linked message: forward or reply'
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/LinkedMessage'
+        body:
+          description: Body of created message. Text + attachments
+          allOf:
+            - $ref: '#/components/schemas/MessageBody'
+      required:
+        - sender
         - body
         - timestamp
     MessageStat:
@@ -1563,6 +1687,28 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/MediaAttachmentPayload'
+            thumbnail:
+              description: Video thumbnail
+              type: string
+              nullable: true
+              readOnly: false
+              allOf:
+                - $ref: '#/components/schemas/PhotoAttachmentPayload'
+            width:
+              description: Video width
+              type: integer
+              nullable: true
+              readOnly: false
+            height:
+              description: Video height
+              type: integer
+              nullable: true
+              readOnly: false
+            duration:
+              description: Video duration in seconds
+              type: integer
+              nullable: true
+              readOnly: false
           required:
             - payload
     AudioAttachment:
@@ -1631,18 +1777,17 @@ components:
             - payload
     ContactAttachmentPayload:
       properties:
-        vcfInfo:
+        vcf_info:
           description: User info in VCF format
           nullable: true
+          readOnly: false
           type: string
-        tamInfo:
+        tam_info:
           description: User info
           nullable: true
+          readOnly: false
           allOf:
             - $ref: '#/components/schemas/User'
-      required:
-        - vcfInfo
-        - tamInfo
     StickerAttachmentPayload:
       allOf:
         - $ref: '#/components/schemas/AttachmentPayload'
@@ -1688,13 +1833,11 @@ components:
               type: string
               readOnly: false
               nullable: true
-            image:
+            image_url:
               description: Link preview image
-              type: object
+              type: string
               nullable: true
               readOnly: false
-              allOf:
-                - $ref: '#/components/schemas/PhotoAttachment'
           required:
             - payload
     LocationAttachment:
@@ -1747,6 +1890,7 @@ components:
           link: '#/components/schemas/LinkButton'
           request_geo_location: '#/components/schemas/RequestGeoLocationButton'
           request_contact: '#/components/schemas/RequestContactButton'
+          chat: '#/components/schemas/ChatButton'
       required:
         - type
         - text
@@ -1792,6 +1936,41 @@ components:
               readOnly: false
               type: boolean
               default: false
+    ChatButton:
+      description: |-
+        Button that creates new chat as soon as the first user clicked on it.
+        Bot will be added to chat participants as administrator.
+        Message author will be owner of the chat.
+      allOf:
+        - $ref: '#/components/schemas/Button'
+        - properties:
+            chat_title:
+              description: 'Title of chat to be created'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 200
+            chat_description:
+              description: 'Chat description'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 400
+            start_payload:
+              description: 'Start payload will be sent to bot as soon as chat created'
+              readOnly: false
+              nullable: true
+              type: string
+              maxLength: 512
+            uuid:
+              description: |-
+                Unique button identifier across all chat buttons in keyboard.
+                If `uuid` changed, new chat will be created on the next click.
+                Server will generate it at the time when button initially posted.
+                Reuse it when you edit the message.'
+              readOnly: false
+              nullable: true
+              type: integer
     Intent:
       description: Intent of button
       type: string
@@ -1930,24 +2109,24 @@ components:
           description: Contact name
           nullable: true
           type: string
-        contactId:
-          description: Contact identifier
+        contact_id:
+          description: Contact identifier if it is reigstered TamTam user
           nullable: true
+          readOnly: false
           type: integer
           format: int64
-        vcfInfo:
+        vcf_info:
           description: Full information about contact in VCF format
           nullable: true
+          readOnly: false
           type: string
-        vcfPhone:
+        vcf_phone:
           description: Contact phone in VCF format
+          readOnly: false
           nullable: true
           type: string
       required:
         - name
-        - contactId
-        - vcfInfo
-        - vcfPhone
     StickerAttachmentRequest:
       description: Request to attach sticker. MUST be the only attachment request in message
       allOf:
@@ -2079,6 +2258,42 @@ components:
           nullable: true
           readOnly: false
           type: string
+    ConstructorAnswer:
+      description: Bot's answer on construction request
+      properties:
+        messages:
+          type: array
+          description: Array of prepared messages. This messages will be sent as user taps on "Send" button
+          readOnly: false
+          items:
+            $ref: '#/components/schemas/NewMessageBody'
+        allow_user_input:
+          description: 'If `true` user can send any input manually. Otherwise, only keyboard will be shown'
+          type: boolean
+          readOnly: false
+        hint:
+          description: 'Hint to user. Will be shown on top of keyboard'
+          nullable: true
+          readOnly: false
+          type: string
+        data:
+          description: |-
+            In this property you can store any additional data up to 8KB. We send this data back to bot within the
+            next construction request. It is handy to store here any state of construction session
+          type: string,
+          readOnly: false
+          maxLength: 8192
+        keyboard:
+          description: 'Keyboard to show to user in constructor mode'
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/Keyboard'
+        placeholder:
+          nullable: true
+          readOnly: false
+          description: 'Text to show over the text field'
+          type: string
     Error:
       description: Server returns this if there was an exception to your request
       properties:
@@ -2157,6 +2372,9 @@ components:
           user_removed: '#/components/schemas/UserRemovedFromChatUpdate'
           bot_started: '#/components/schemas/BotStartedUpdate'
           chat_title_changed: '#/components/schemas/ChatTitleChangedUpdate'
+          message_construction_request: '#/components/schemas/MessageConstructionRequest'
+          message_constructed: '#/components/schemas/MessageConstructedUpdate'
+          message_chat_created: '#/components/schemas/MessageChatCreatedUpdate'
       properties:
         update_type:
           type: string
@@ -2203,8 +2421,18 @@ components:
             message_id:
               description: Identifier of removed message
               type: string
+            chat_id:
+              description: Chat identifier where message has been deleted
+              type: integer
+              format: int64
+            user_id:
+              description: User who deleted this message
+              type: integer
+              format: int64
           required:
             - message_id
+            - chat_id
+            - user_id
     MessageEditedUpdate:
       description: You will get this `update` as soon as message is edited
       allOf:
@@ -2304,6 +2532,12 @@ components:
               description: User pressed the 'Start' button
               allOf:
                 - $ref: '#/components/schemas/User'
+            payload:
+              description: Additional data from deep-link passed on bot startup
+              type: string
+              maxLength: 512
+              nullable: true
+              readOnly: false
           required:
             - chat_id
             - user
@@ -2327,3 +2561,101 @@ components:
             - chat_id
             - user
             - title
+    MessageConstructionRequest:
+      description: Bot will get this update when user sent to bot any message or pressed button during construction process
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            user:
+              description: User who initiated this request
+              allOf:
+                - $ref: '#/components/schemas/UserWithPhoto'
+            user_locale:
+              description: Current user locale in IETF BCP 47 format
+              type: string
+              readOnly: false
+            session_id:
+              description: Constructor session identifier
+              type: string
+            data:
+              description: data received from previous `ConstructorAnswer`
+              type: string
+              readOnly: false
+              nullable: true
+              maxLength: 4096
+            input:
+              description: User's input. It can be message (text/attachments) or simple button's callback
+              allOf:
+                - $ref: '#/components/schemas/ConstructorInput'
+          required:
+            - user
+            - session_id
+            - input
+    ConstructorInput:
+      description: It can be either message (text/attachments) or button callback
+      discriminator:
+        propertyName: input_type
+        mapping:
+          callback: '#/components/schemas/CallbackConstructorInput'
+          message: '#/components/schemas/MessageConstructorInput'
+      properties:
+        input_type:
+          type: string
+      required:
+        - input_type
+    CallbackConstructorInput:
+      description: Bot will get this input as soon as soon user taps on button created by bot in construction mode
+      allOf:
+        - $ref: '#/components/schemas/ConstructorInput'
+        - properties:
+            payload:
+              description: Pressed button payload
+              type: string
+          required:
+            - payload
+    MessageConstructorInput:
+      description: Bot will get this input in case when user sends message to bot manually
+      allOf:
+        - $ref: '#/components/schemas/ConstructorInput'
+        - properties:
+            messages:
+              description: Messages sent by user during construction process. Typically it is single element array but sometimes it can contains multiple messages. Can be empty on initial request when user just opened constructor
+              type: array
+              nullable: true
+              items:
+                $ref: '#/components/schemas/NewMessageBody'
+          required:
+            - messages
+    MessageConstructedUpdate:
+      description: Bot will get this update when constructed message has been posted to any chat
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            session_id:
+              description: Constructor session identifier
+              type: string
+            message:
+              description: User message
+              $ref: '#/components/schemas/ConstructedMessage'
+          required:
+            - session_id
+            - message
+    MessageChatCreatedUpdate:
+      description: Bot will get this update when chat has been created as soon as first user clicked chat button
+      allOf:
+        - $ref: '#/components/schemas/Update'
+        - properties:
+            chat:
+              description: Created chat
+              $ref: '#/components/schemas/Chat'
+            message_id:
+              description: Message identifier where the button has been clicked
+              type: string
+            start_payload:
+              description: Payload from chat button
+              type: string
+              nullable: true
+              readOnly: false
+          required:
+            - message_id
+            - chat
