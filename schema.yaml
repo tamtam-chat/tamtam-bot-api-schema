@@ -2431,6 +2431,11 @@ components:
               nullable: true
               allOf:
                 - $ref: '#/components/schemas/Message'
+            user_locale:
+              description: Current user locale in IETF BCP 47 format
+              type: string
+              nullable: true
+              readOnly: false
           required:
             - callback
             - message
@@ -2569,6 +2574,10 @@ components:
               type: string
               maxLength: 512
               nullable: true
+              readOnly: false
+            user_locale:
+              description: Current user locale in IETF BCP 47 format
+              type: string
               readOnly: false
           required:
             - chat_id
