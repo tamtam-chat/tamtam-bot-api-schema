@@ -933,6 +933,38 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalError'
+  /messages/{messageId}:
+    get:
+      tags:
+        - messages
+      operationId: getMessageById
+      description: Returns single message by its identifier.
+      summary: Get message
+      parameters:
+        - description: Message identifier (`mid`) to get single message in chat
+          in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+            pattern: '[a-zA-Z0-9_\-]+'
+      responses:
+        '200':
+          description: Returns single message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: In case when message is not found or bot has no access to it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /answers:
     post:
       tags:
@@ -2582,7 +2614,7 @@ components:
               type: string
               readOnly: false
               nullable: true
-              maxLength: 4096
+              maxLength: 8192
             input:
               description: User's input. It can be message (text/attachments) or simple button's callback
               allOf:
