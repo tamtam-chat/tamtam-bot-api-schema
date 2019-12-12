@@ -1847,6 +1847,20 @@ components:
             - payload
             - width
             - height
+    ShareAttachmentPayload:
+      description: Payload of ShareAttachmentRequest
+      properties:
+        url:
+          description: URL attached to message as media preview
+          minLength: 1
+          type: string
+          nullable: true
+          readOnly: false
+        token:
+          description: Attachment token
+          type: string
+          nullable: true
+          readOnly: false
     ShareAttachment:
       allOf:
         - $ref: '#/components/schemas/Attachment'
@@ -1854,7 +1868,7 @@ components:
             payload:
               type: object
               allOf:
-                - $ref: '#/components/schemas/AttachmentPayload'
+                - $ref: '#/components/schemas/ShareAttachmentPayload'
             title:
               description: Link preview title
               type: string
@@ -2029,6 +2043,7 @@ components:
           contact: '#/components/schemas/ContactAttachmentRequest'
           inline_keyboard: '#/components/schemas/InlineKeyboardAttachmentRequest'
           location: '#/components/schemas/LocationAttachmentRequest'
+          share: '#/components/schemas/ShareAttachmentRequest'
       properties:
         type:
           type: string
@@ -2192,6 +2207,7 @@ components:
         buttons:
           description: Two-dimensional array of buttons
           type: array
+          minLength: 1
           items:
             type: array
             items:
@@ -2212,6 +2228,16 @@ components:
           required:
             - latitude
             - longitude
+    ShareAttachmentRequest:
+      description: Request to attach media preview of any external URL
+      allOf:
+        - $ref: '#/components/schemas/AttachmentRequest'
+        - properties:
+            payload:
+              allOf:
+                - $ref: '#/components/schemas/ShareAttachmentPayload'
+          required:
+            - payload
     SubscriptionRequestBody:
       description: Request to set up WebHook subscription
       properties:
@@ -2312,7 +2338,7 @@ components:
           description: |-
             In this property you can store any additional data up to 8KB. We send this data back to bot within the
             next construction request. It is handy to store here any state of construction session
-          type: string,
+          type: string
           readOnly: false
           maxLength: 8192
         keyboard:
