@@ -80,14 +80,36 @@ info:
        "message": "Invalid access_token"
     }
     ```
-    ## Receiving Notifications
-    TamTam Bot API supports 2 options of receiving notifications on new dialog events for bots:
+    ## Receiving notifications
+    TamTam Bot API supports 2 options of receiving notifications on new events for bots:
     - Push notifications via WebHook. To receive data via WebHook, you'll have to [add subscription](https://dev.tamtam.chat/#operation/subscribe);
-    - Notifications upon request via [long polling](#operation/getUpdates) API.
-    All data can be received via long polling **by default** after creating the bot,
+    - Notifications upon request via [long polling](#operation/getUpdates) API. All data can be received via long polling **by default** after creating the bot.
 
     Both methods **cannot** be used simultaneously.
     Refer to the response schema of [/updates](https://dev.tamtam.chat/#operation/getUpdates) method to check all available types of updates.
+
+    ### Webhook
+    There is some notes about how we handle webhook subscription:
+    1. Sometimes webhook notification cannot be delivered in case when bot server or network is down.
+
+      In such case we well retry delivery in a short period of time (from 30 to 60 seconds) and will do this until get
+      `200 OK` status code from your server, but not longer than **8 hours** (*may change over time*) since update happened.
+
+      We also consider any non `200`-response from server as failed delivery.
+
+    2. To protect your bot from unexpected high load we send **no more than 100** notifications per second by default.
+      If you want increase this limit, contact us at [@support](https://tt.me/support).
+
+
+    BaseBotApiController.java
+    It should be from one of the following subnets:
+    ```
+    185.16.150.0/30
+    185.16.150.84/30
+    185.16.150.152/30
+    185.16.150.192/30
+    ```
+
 
     ## Message buttons
     You can program buttons for users answering a bot.
@@ -169,6 +191,24 @@ info:
 
     Deep linking mechanism is supported for iOS version 2.7.0 and Android 2.9.0 and higher.
 
+    ## Constructors
+    Constructor is a bot that can create a message for user: add buttons, attach some media, insert text.
+
+    You can enable constructor mode for your bot via [@PrimeBot](https://tt.me/primebot)
+    sending [/constructor_mode](https://tt.me/primebot/start/constructor_mode) command.
+
+    For bot developers, it looks like request-response interaction where TamTam application
+    sends `message_construction_request` on behalf of user. Bot [responds](#operation/construct)
+    to it with `messages` ready to go or `keyboard` in case it requires further action from user.
+
+    Bot also can set up UI parts such as `hint` or `placeholder`, allow or not user's input:
+    ![Constructor UI parts](https://dev.tamtam.chat/static/hint-079a332a51a2e9e6d415ec716389661b.png)
+
+    As soon as user finishes composing a message, they can post it. Bot will receive `message_constructed_update`
+    with posted message.
+
+    Constructors are supported for iOS version 2.7.0 and Android 2.9.0 and higher.
+
     # Versioning
     API models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.
     To specify the data model version you are getting through WebHook subscription, use the `version` property in the request body of the [subscribe](https://dev.tamtam.chat/#operation/subscribe) request.
@@ -177,6 +217,15 @@ info:
     We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
 
     # Changelog
+    ##### Version 0.2.0
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/09c95259d6c8c424f82b50eab93872e7db2ca208) new type of button to start new chat
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ea4581d83d7132663d6cc5c2c61c058a2bd46aac) Constructors API that allows bots to create message on behalf of a user
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/c5ff03175407819aceebd9c25de49eed566a0ce1) support for deep-links
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff4cc4f93662d6c25db11fac72d9fcbf1f66cad8) ability to block users in chats
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/b965bfb0d02933e819435312e6ab184a3dfc0250) `chat_id` and `user_id` to `message_removed` update
+    - Added meta information for video attachments
+    - Other minor improvements and fixes. Check out complete [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.1.11...v0.1.10) for this version
+
     ##### Version 0.1.10
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/a9ef3a1b8f4e1a75b55a9b80877eddc2c6f07ec4) `disable_link_preview` parameter to POST:/messages method to disable links parsing in text
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/eb99e8ab97b55fa196d9957fca34d2316a4ca8aa) `sending_file` action
