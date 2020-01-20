@@ -2523,6 +2523,11 @@ components:
               description: Newly created message
               allOf:
                 - $ref: '#/components/schemas/Message'
+            user_locale:
+              description: Current user locale in IETF BCP 47 format. Available only in dialogs
+              type: string
+              readOnly: false
+              nullable: true
           required:
             - message
     MessageRemovedUpdate:
