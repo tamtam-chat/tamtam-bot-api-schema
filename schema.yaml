@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.2.0
+  version: 0.2.1
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -332,6 +332,35 @@ paths:
                 $ref: '#/components/schemas/ChatList'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  '/chats/{chatLink}':
+    get:
+      tags:
+        - chats
+      x-opGroup: chat
+      operationId: getChatByLink
+      description: Returns chat/channel information by its public link or dialog with user by username
+      summary: Get chat by link
+      parameters:
+        - name: chatLink
+          description: Public chat link or username
+          required: true
+          in: path
+          schema:
+            type: string
+            pattern: '@?[a-zA-Z]+[a-zA-Z0-9-_]*'
+      responses:
+        '200':
+          description: Chat information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
   '/chats/{chatId}':
