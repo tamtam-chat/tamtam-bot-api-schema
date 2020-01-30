@@ -1608,7 +1608,7 @@ components:
       description: Message constructed i in chat
       properties:
         sender:
-          description: User who sent this message
+          description: Author who sent this message. Can be `null` if message has been posted on behalf of a channel
           allOf:
             - $ref: '#/components/schemas/User'
         timestamp:
@@ -1626,7 +1626,6 @@ components:
           allOf:
             - $ref: '#/components/schemas/MessageBody'
       required:
-        - sender
         - body
         - timestamp
     MessageStat:
