@@ -2093,6 +2093,8 @@ components:
               readOnly: false
               nullable: true
               type: integer
+          required:
+            - chat_title
     Intent:
       description: Intent of button
       type: string
