@@ -2069,7 +2069,6 @@ components:
             chat_title:
               description: 'Title of chat to be created'
               readOnly: false
-              nullable: true
               type: string
               maxLength: 200
             chat_description:
@@ -2093,6 +2092,8 @@ components:
               readOnly: false
               nullable: true
               type: integer
+          required:
+            - chat_title
     Intent:
       description: Intent of button
       type: string
