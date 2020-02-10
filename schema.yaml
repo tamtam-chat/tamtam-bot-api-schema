@@ -982,7 +982,6 @@ paths:
               $ref: '#/components/schemas/NewMessageBody'
       responses:
         '200':
-          description: Returns info about created message
           $ref: '#/components/responses/SuccessResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -2785,7 +2784,8 @@ components:
               type: string
             message:
               description: User message
-              $ref: '#/components/schemas/ConstructedMessage'
+              allOf:
+                - $ref: '#/components/schemas/ConstructedMessage'
           required:
             - session_id
             - message
@@ -2796,7 +2796,8 @@ components:
         - properties:
             chat:
               description: Created chat
-              $ref: '#/components/schemas/Chat'
+              allOf:
+                - $ref: '#/components/schemas/Chat'
             message_id:
               description: Message identifier where the button has been clicked
               type: string
