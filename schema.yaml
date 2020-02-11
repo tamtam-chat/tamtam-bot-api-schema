@@ -1237,6 +1237,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/User'
         - properties:
+            description:
+              description: User description. Can be `null` if user did not fill it out
+              type: string
+              nullable: true
+              readOnly: false
             avatar_url:
               description: URL of avatar
               type: string
@@ -1255,12 +1260,6 @@ components:
               items:
                 $ref: '#/components/schemas/BotCommand'
               maxItems: 32
-              readOnly: false
-              nullable: true
-            description:
-              description: Bot description
-              maxLength: 16000
-              type: string
               readOnly: false
               nullable: true
     BotPatch:
@@ -1608,6 +1607,7 @@ components:
       properties:
         sender:
           description: Author who sent this message. Can be `null` if message has been posted on behalf of a channel
+          readOnly: false
           allOf:
             - $ref: '#/components/schemas/User'
         timestamp:
