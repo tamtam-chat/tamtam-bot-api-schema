@@ -1239,6 +1239,7 @@ components:
         - properties:
             description:
               description: User description. Can be `null` if user did not fill it out
+              maxLength: 16000
               type: string
               nullable: true
               readOnly: false
