@@ -214,9 +214,26 @@ info:
     To specify the data model version you are getting through WebHook subscription, use the `version` property in the request body of the [subscribe](https://dev.tamtam.chat/#operation/subscribe) request.
 
     # Libraries
-    We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
+    We have developed the official [Java client](https://github.com/tamtam-chat/tamtam-bot-api) and [SDK](https://github.com/tamtam-chat/tamtam-bot-sdk).
+
+    Also check out unofficial libraries, created by our enthusiasts:
+    - [Kotlin DSL client](https://github.com/Namazed/TamTamBotApiClientDsl)
+    - [GO client](https://github.com/neonxp/tamtam)
+    - [Node.js module](https://github.com/vershininivan/node-tamtam-botapi)
+
+    #### Python:
+    - [Python client](https://github.com/asvbkr/openapi_client)
+    - [tamtam.py](https://github.com/uwinx/tamtam.py)
+    - [registriren/botapitamtam](https://github.com/registriren/botapitamtam)
 
     # Changelog
+    ##### Version 0.2.1
+    - [Added](#operation/getChatByLink) method to get chat by its `@link`
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..HEAD#diff-7e9de78f42fb0d2ae80878b90c87300aR1240) `description` for users in some cases
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..HEAD#diff-7e9de78f42fb0d2ae80878b90c87300aR2555) `user_locale` to `message_created` update in dialogs
+
+    Check out the complete [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..v0.2.1) for this release.
+
     ##### Version 0.2.0
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/09c95259d6c8c424f82b50eab93872e7db2ca208) new type of button to start new chat
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ea4581d83d7132663d6cc5c2c61c058a2bd46aac) Constructors API that allows bots to create message on behalf of a user
@@ -240,17 +257,28 @@ info:
     - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/2ebf36b22758ea3487304f5b0d0d811798e78b61) `user_id` of `CallbackAnswer`. It is no longer required. Just use `callback_id` of `Callback`
     - Several minor improvements: check [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/beccbe5f4fbed32182a13e257ca1cfae7f40ea8d...master) for all changes
 
-    ##### Version 0.1.8
-    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1580)
-    - `token` is now only one required property for video/audio/file attachments
-    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
-    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
-
     To see changelog for older versions visit our [GitHub](https://github.com/tamtam-chat/tamtam-bot-api-schema/releases).
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
   - access_token: []
+tags:
+  - name: chat_model
+    x-displayName: Chat
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Chat"/>
+  - name: message_model
+    x-displayName: Message
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Message"/>
+  - name: new_message_model
+    x-displayName: New message
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/NewMessageBody"/>
+  - name: update_model
+    x-displayName: Update
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Update"/>
 x-tagGroups:
   - name: Methods
     tags:
@@ -259,6 +287,12 @@ x-tagGroups:
       - messages
       - subscriptions
       - upload
+  - name: Objects
+    tags:
+      - chat_model
+      - message_model
+      - new_message_model
+      - update_model
 paths:
   /me:
     get:
@@ -575,7 +609,6 @@ paths:
               type: integer
               format: int64
             nullable: true
-          style: simple
         - name: marker
           description: Marker
           in: query
@@ -815,7 +848,6 @@ paths:
         - description: Comma-separated list of message ids to get
           name: message_ids
           in: query
-          style: simple
           schema:
             uniqueItems: true
             items:
@@ -1148,7 +1180,6 @@ paths:
             items:
               type: string
             nullable: true
-          style: simple
       responses:
         '200':
           description: List of updates
