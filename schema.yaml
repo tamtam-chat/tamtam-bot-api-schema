@@ -101,7 +101,6 @@ info:
       If you want increase this limit, contact us at [@support](https://tt.me/support).
 
 
-    BaseBotApiController.java
     It should be from one of the following subnets:
     ```
     185.16.150.0/30
