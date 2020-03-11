@@ -1603,7 +1603,7 @@ components:
           type: integer
           format: int64
         link:
-          description: Forwarder or replied message
+          description: Forwarded or replied message
           nullable: true
           readOnly: false
           allOf:
