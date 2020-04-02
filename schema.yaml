@@ -1351,12 +1351,11 @@ components:
         is_bot:
           description: '`true` if user is bot'
           type: boolean
-          nullable: true
-          readOnly: false
       required:
         - user_id
         - name
         - username
+        - is_bot
     UserWithPhoto:
       allOf:
         - $ref: '#/components/schemas/User'
