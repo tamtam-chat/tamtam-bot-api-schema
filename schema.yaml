@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.2.1
+  version: 0.3.0
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -486,6 +486,95 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  '/chats/{chatId}/pin':
+    get:
+      tags:
+        - chats
+      operationId: getPinnedMessage
+      description: Get pinned message in chat or channel.
+      summary: Get pinned message
+      parameters:
+        - name: chatId
+          description: Chat identifier to get its pinned message
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      responses:
+        '200':
+          description: Pinned message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPinnedMessageResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+        - chats
+      operationId: pinMessage
+      description: Pins message in chat or channel.
+      summary: Pin message
+      parameters:
+        - name: chatId
+          description: Chat identifier where message should be pinned
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinMessageBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - chats
+      operationId: unpinMessage
+      description: Unpins message in chat or channel.
+      summary: Unpin message
+      parameters:
+        - name: chatId
+          description: Chat identifier to remove pinned message
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
   '/chats/{chatId}/members/me':
@@ -2104,7 +2193,6 @@ components:
         - properties:
             chat_title:
               description: 'Title of chat to be created'
-              readOnly: false
               type: string
               maxLength: 200
             chat_description:
@@ -2393,6 +2481,27 @@ components:
           readOnly: false
       required:
         - success
+    PinMessageBody:
+      properties:
+        message_id:
+          description: Identifier of message to be pinned in chat
+          type: string
+        notify:
+          description: If `true`, participants will be notified with system message in chat/channel
+          type: boolean
+          default: false
+          readOnly: false
+          nullable: true
+      required:
+        - message_id
+    GetPinnedMessageResult:
+      properties:
+        message:
+          description: Pinned message. Can be `null` if no message pinned in chat
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Message'
     Callback:
       description: Object sent to bot when user presses button
       properties:
