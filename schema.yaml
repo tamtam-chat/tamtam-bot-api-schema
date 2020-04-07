@@ -1457,6 +1457,7 @@ components:
              - removed: bot was kicked
              - left: bot intentionally left chat
              - closed: chat was closed
+             - suspended: bot was stopped by user. *Only for dialogs*
           allOf:
             - $ref: '#/components/schemas/ChatStatus'
         title:
@@ -1517,6 +1518,12 @@ components:
           nullable: true
           readOnly: false
           type: string
+        pinned_message:
+          description: Pinned message in chat or channel. Returned only when single chat is requested
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/Message'
       required:
         - chat_id
         - type
