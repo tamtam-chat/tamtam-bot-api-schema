@@ -226,6 +226,12 @@ info:
     - [registriren/botapitamtam](https://github.com/registriren/botapitamtam)
 
     # Changelog
+    ##### Version 0.3.0
+    - Added methods to [pin](#operation/pinMessage)/[unpin](#operation/unpinMessage) messages in chats/channels
+    - Added `is_bot` flag to [`User`](#tag/user_model) model
+
+    Check out the complete [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.1..v0.3.0) for this release.
+
     ##### Version 0.2.1
     - [Added](#operation/getChatByLink) method to get chat by its `@link`
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..HEAD#diff-7e9de78f42fb0d2ae80878b90c87300aR1240) `description` for users in some cases
@@ -248,20 +254,16 @@ info:
     - [Removed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/7a5ab5f0ea1336b3460d1827a6a7b3b141e19776) several deprecated properties
     - `photo` upload type [renamed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/74505883e6acb306686a6d141414aeaf5131ef49) to `image`. *C* is for consistency
 
-    ##### Version 0.1.9
-    - Added method to [get chat administrators](#operation/getAdmins)
-    - For `type: dialog` chats [added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a#diff-7e9de78f42fb0d2ae80878b90c87300aR1160) `dialog_with_user`
-    - Added `url` for [messages](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/137dd9dfa4e583d429f017ba69c20caa9deac105) in public chats/channels
-    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a) `callback_id` of `InlineKeyboardAttachment`
-    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/2ebf36b22758ea3487304f5b0d0d811798e78b61) `user_id` of `CallbackAnswer`. It is no longer required. Just use `callback_id` of `Callback`
-    - Several minor improvements: check [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/beccbe5f4fbed32182a13e257ca1cfae7f40ea8d...master) for all changes
-
     To see changelog for older versions visit our [GitHub](https://github.com/tamtam-chat/tamtam-bot-api-schema/releases).
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
   - access_token: []
 tags:
+  - name: user_model
+    x-displayName: User
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/User"/>
   - name: chat_model
     x-displayName: Chat
     description: |
@@ -288,6 +290,7 @@ x-tagGroups:
       - upload
   - name: Objects
     tags:
+      - user_model
       - chat_model
       - message_model
       - new_message_model
