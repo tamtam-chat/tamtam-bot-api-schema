@@ -1569,6 +1569,17 @@ components:
           maxLength: 200
           readOnly: false
           nullable: true
+        pin:
+          description: Identifier of message to be pinned in chat. In case you want to remove pin, use [unpin](#operation/unpinMessage) method
+          type: string
+          readOnly: false
+          nullable: true
+        notify:
+          description: By default, participants will be notified about change with system message in chat/channel
+          type: boolean
+          default: true
+          readOnly: false
+          nullable: true
     ChatMember:
       allOf:
         - $ref: '#/components/schemas/UserWithPhoto'
@@ -2488,7 +2499,7 @@ components:
         notify:
           description: If `true`, participants will be notified with system message in chat/channel
           type: boolean
-          default: false
+          default: true
           readOnly: false
           nullable: true
       required:
