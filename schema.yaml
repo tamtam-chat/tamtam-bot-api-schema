@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.2.1
+  version: 0.3.0
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -101,7 +101,6 @@ info:
       If you want increase this limit, contact us at [@support](https://tt.me/support).
 
 
-    BaseBotApiController.java
     It should be from one of the following subnets:
     ```
     185.16.150.0/30
@@ -214,9 +213,32 @@ info:
     To specify the data model version you are getting through WebHook subscription, use the `version` property in the request body of the [subscribe](https://dev.tamtam.chat/#operation/subscribe) request.
 
     # Libraries
-    We have created [Java library](https://github.com/tamtam-chat/tamtam-bot-api) to make using API easier.
+    We have developed the official [Java client](https://github.com/tamtam-chat/tamtam-bot-api) and [SDK](https://github.com/tamtam-chat/tamtam-bot-sdk).
+
+    Also check out unofficial libraries, created by our enthusiasts:
+    - [Kotlin DSL client](https://github.com/Namazed/TamTamBotApiClientDsl)
+    - [GO client](https://github.com/neonxp/tamtam)
+    - [Node.js module](https://github.com/vershininivan/node-tamtam-botapi)
+
+    #### Python:
+    - [Python client](https://github.com/asvbkr/openapi_client)
+    - [tamtam.py](https://github.com/uwinx/tamtam.py)
+    - [registriren/botapitamtam](https://github.com/registriren/botapitamtam)
 
     # Changelog
+    ##### Version 0.3.0
+    - Added methods to [pin](#operation/pinMessage)/[unpin](#operation/unpinMessage) messages in chats/channels
+    - Added `is_bot` flag to [`User`](#tag/user_model) model
+
+    Check out the complete [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.1..v0.3.0) for this release.
+
+    ##### Version 0.2.1
+    - [Added](#operation/getChatByLink) method to get chat by its `@link`
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..HEAD#diff-7e9de78f42fb0d2ae80878b90c87300aR1240) `description` for users in some cases
+    - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..HEAD#diff-7e9de78f42fb0d2ae80878b90c87300aR2555) `user_locale` to `message_created` update in dialogs
+
+    Check out the complete [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/v0.2.0..v0.2.1) for this release.
+
     ##### Version 0.2.0
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/09c95259d6c8c424f82b50eab93872e7db2ca208) new type of button to start new chat
     - [Added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ea4581d83d7132663d6cc5c2c61c058a2bd46aac) Constructors API that allows bots to create message on behalf of a user
@@ -232,25 +254,32 @@ info:
     - [Removed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/7a5ab5f0ea1336b3460d1827a6a7b3b141e19776) several deprecated properties
     - `photo` upload type [renamed](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/74505883e6acb306686a6d141414aeaf5131ef49) to `image`. *C* is for consistency
 
-    ##### Version 0.1.9
-    - Added method to [get chat administrators](#operation/getAdmins)
-    - For `type: dialog` chats [added](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a#diff-7e9de78f42fb0d2ae80878b90c87300aR1160) `dialog_with_user`
-    - Added `url` for [messages](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/137dd9dfa4e583d429f017ba69c20caa9deac105) in public chats/channels
-    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/ff9e2472941d4dd2de540db0d0ea8b9c3d0ed01a) `callback_id` of `InlineKeyboardAttachment`
-    - [**Removed**](https://github.com/tamtam-chat/tamtam-bot-api-schema/commit/2ebf36b22758ea3487304f5b0d0d811798e78b61) `user_id` of `CallbackAnswer`. It is no longer required. Just use `callback_id` of `Callback`
-    - Several minor improvements: check [diff](https://github.com/tamtam-chat/tamtam-bot-api-schema/compare/beccbe5f4fbed32182a13e257ca1cfae7f40ea8d...master) for all changes
-
-    ##### Version 0.1.8
-    - Added `code`, `width`, `height` to [StickerAttachment](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1580)
-    - `token` is now only one required property for video/audio/file attachments
-    - `sender` and `chat_id` of [LinkedMessage](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1401) are now optional
-    - Added clarifying `message` to [SimpleQueryResult](https://github.com/tamtam-chat/tamtam-bot-api-schema/blob/master/schema.yaml#L1938)
-
     To see changelog for older versions visit our [GitHub](https://github.com/tamtam-chat/tamtam-bot-api-schema/releases).
 servers:
   - url: 'https://botapi.tamtam.chat'
 security:
   - access_token: []
+tags:
+  - name: user_model
+    x-displayName: User
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/User"/>
+  - name: chat_model
+    x-displayName: Chat
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Chat"/>
+  - name: message_model
+    x-displayName: Message
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Message"/>
+  - name: new_message_model
+    x-displayName: New message
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/NewMessageBody"/>
+  - name: update_model
+    x-displayName: Update
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Update"/>
 x-tagGroups:
   - name: Methods
     tags:
@@ -259,6 +288,13 @@ x-tagGroups:
       - messages
       - subscriptions
       - upload
+  - name: Objects
+    tags:
+      - user_model
+      - chat_model
+      - message_model
+      - new_message_model
+      - update_model
 paths:
   /me:
     get:
@@ -455,6 +491,95 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalError'
+  '/chats/{chatId}/pin':
+    get:
+      tags:
+        - chats
+      operationId: getPinnedMessage
+      description: Get pinned message in chat or channel.
+      summary: Get pinned message
+      parameters:
+        - name: chatId
+          description: Chat identifier to get its pinned message
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      responses:
+        '200':
+          description: Pinned message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPinnedMessageResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+        - chats
+      operationId: pinMessage
+      description: Pins message in chat or channel.
+      summary: Pin message
+      parameters:
+        - name: chatId
+          description: Chat identifier where message should be pinned
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinMessageBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - chats
+      operationId: unpinMessage
+      description: Unpins message in chat or channel.
+      summary: Unpin message
+      parameters:
+        - name: chatId
+          description: Chat identifier to remove pinned message
+          required: true
+          in: path
+          schema:
+            type: integer
+            format: int64
+            pattern: \-?\d+
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
   '/chats/{chatId}/members/me':
     get:
       tags:
@@ -575,7 +700,6 @@ paths:
               type: integer
               format: int64
             nullable: true
-          style: simple
         - name: marker
           description: Marker
           in: query
@@ -815,7 +939,6 @@ paths:
         - description: Comma-separated list of message ids to get
           name: message_ids
           in: query
-          style: simple
           schema:
             uniqueItems: true
             items:
@@ -1148,7 +1271,6 @@ paths:
             items:
               type: string
             nullable: true
-          style: simple
       responses:
         '200':
           description: List of updates
@@ -1229,10 +1351,14 @@ components:
           description: Unique public user name. Can be `null` if user is not accessible or it is not set
           type: string
           nullable: true
+        is_bot:
+          description: '`true` if user is bot'
+          type: boolean
       required:
         - user_id
         - name
         - username
+        - is_bot
     UserWithPhoto:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -1334,6 +1460,7 @@ components:
              - removed: bot was kicked
              - left: bot intentionally left chat
              - closed: chat was closed
+             - suspended: bot was stopped by user. *Only for dialogs*
           allOf:
             - $ref: '#/components/schemas/ChatStatus'
         title:
@@ -1394,6 +1521,12 @@ components:
           nullable: true
           readOnly: false
           type: string
+        pinned_message:
+          description: Pinned message in chat or channel. Returned only when single chat is requested
+          nullable: true
+          readOnly: false
+          allOf:
+            - $ref: '#/components/schemas/Message'
       required:
         - chat_id
         - type
@@ -1444,6 +1577,17 @@ components:
           type: string
           minLength: 1
           maxLength: 200
+          readOnly: false
+          nullable: true
+        pin:
+          description: Identifier of message to be pinned in chat. In case you want to remove pin, use [unpin](#operation/unpinMessage) method
+          type: string
+          readOnly: false
+          nullable: true
+        notify:
+          description: By default, participants will be notified about change with system message in chat/channel
+          type: boolean
+          default: true
           readOnly: false
           nullable: true
     ChatMember:
@@ -1573,7 +1717,7 @@ components:
           type: integer
           format: int64
         link:
-          description: Forwarder or replied message
+          description: Forwarded or replied message
           nullable: true
           readOnly: false
           allOf:
@@ -2069,7 +2213,6 @@ components:
         - properties:
             chat_title:
               description: 'Title of chat to be created'
-              readOnly: false
               type: string
               maxLength: 200
             chat_description:
@@ -2358,6 +2501,27 @@ components:
           readOnly: false
       required:
         - success
+    PinMessageBody:
+      properties:
+        message_id:
+          description: Identifier of message to be pinned in chat
+          type: string
+        notify:
+          description: If `true`, participants will be notified with system message in chat/channel
+          type: boolean
+          default: true
+          readOnly: false
+          nullable: true
+      required:
+        - message_id
+    GetPinnedMessageResult:
+      properties:
+        message:
+          description: Pinned message. Can be `null` if no message pinned in chat
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Message'
     Callback:
       description: Object sent to bot when user presses button
       properties:
