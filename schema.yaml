@@ -700,6 +700,7 @@ paths:
               type: integer
               format: int64
             nullable: true
+          style: simple
         - name: marker
           description: Marker
           in: query
@@ -939,6 +940,7 @@ paths:
         - description: Comma-separated list of message ids to get
           name: message_ids
           in: query
+          style: simple
           schema:
             uniqueItems: true
             items:
@@ -1271,6 +1273,7 @@ paths:
             items:
               type: string
             nullable: true
+          style: simple
       responses:
         '200':
           description: List of updates
