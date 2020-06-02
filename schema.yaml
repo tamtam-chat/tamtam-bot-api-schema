@@ -2344,7 +2344,7 @@ components:
       description: This is information you will receive as soon as audio/video is uploaded
       properties:
         token:
-          description: Token is unique uploaded media identfier
+          description: Token is unique uploaded media identifier
           type: string
           readOnly: false
     FileAttachmentRequest:
@@ -2381,7 +2381,7 @@ components:
           nullable: true
           type: string
         contact_id:
-          description: Contact identifier if it is reigstered TamTam user
+          description: Contact identifier if it is registered TamTam user
           nullable: true
           readOnly: false
           type: integer
