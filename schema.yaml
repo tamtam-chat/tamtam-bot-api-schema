@@ -1357,11 +1357,16 @@ components:
         is_bot:
           description: '`true` if user is bot'
           type: boolean
+        last_activity_time:
+          description: Time of last user activity in TamTam (Unix timestamp in milliseconds). Can be outdated if user disabled its "online" status in settings
+          type: integer
+          format: int64
       required:
         - user_id
         - name
         - username
         - is_bot
+        - last_activity_time
     UserWithPhoto:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -1598,6 +1603,7 @@ components:
         - $ref: '#/components/schemas/UserWithPhoto'
         - properties:
             last_access_time:
+              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`) 
               type: integer
               format: int64
             is_owner:
