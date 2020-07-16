@@ -1358,7 +1358,9 @@ components:
           description: '`true` if user is bot'
           type: boolean
         last_activity_time:
-          description: Time of last user activity in TamTam (Unix timestamp in milliseconds). Can be outdated if user disabled its "online" status in settings
+          description: |-
+            Time of last user activity in TamTam (Unix timestamp in milliseconds). 
+            If user has disabled its "online" status in settings, the current time is always returned  
           type: integer
           format: int64
       required:
