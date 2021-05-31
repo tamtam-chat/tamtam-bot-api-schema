@@ -1,0 +1,9 @@
+build/
+deploy/
+target/
+out
+
+.idea
+*.iml
+local.properties
+/bin/

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.3.0
+  version: 0.5.0
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -207,6 +207,56 @@ info:
     with posted message.
 
     Constructors are supported for iOS version 2.7.0 and Android 2.9.0 and higher.
+    
+    ## Text formatting
+    
+    Message text can be improved with basic formatting such as: **strong**, *emphasis*, ~strikethough~, 
+    <ins>underline</ins>, `code` or link. You can use either markdown-like or HTML formatting.
+    
+    To enable text formatting set the `format` property of [NewMessageBody](#tag/new_message_model).
+
+    ### Markdown support
+    To enable [Markdown](https://spec.commonmark.org/0.29/) parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `markdown`.
+    
+    We currently support only the following syntax:
+
+    `*empasized*` or `_empasized_` for *italic* text
+    
+    `**strong**` or `__strong__` for __bold__ text
+    
+    `~strikethough~`  for ~strikethough~ text
+    
+    `+underline+`  for <ins>underlined</ins> text
+    
+    ``` `code` ``` for inline code block
+
+    ` ```code block``` ` for code block
+
+    `[Inline URL](https://dev.tamtam.chat/)` for inline URLs
+
+    `[User mention](tamtam://user/%user_id%)` for user mentions without username
+    
+    ### HTML support
+    
+    To enable HTML parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `html`.
+     
+    Only the following HTML tags are supported. All others will be stripped:
+    
+    Emphasized: `<i>` or `<em>`
+    
+    Strong: `<b>` or `<strong>`
+    
+    Strikethrough: `<del>` or `<s>`
+    
+    Underlined: `<ins>` or `<u>`
+    
+    Link: `<a href="https://dev.tamtam.chat">`
+    
+    Inline code block: `<code>`
+    
+    Code block: `<pre>`
+
+    Text formatting is supported for iOS since version 3.1 and Android since 2.20.0.
 
     # Versioning
     API models and interface may change over time. To make sure your bot will get the right info, we strongly recommend adding API version number to each request. You can add it as `v` parameter to each HTTP-request. For instance, `v=0.1.2`.
@@ -467,7 +517,7 @@ paths:
       tags:
         - chats
       operationId: sendAction
-      description: Send bot action to chat
+      description: Send bot action to chat.
       summary: Send action
       parameters:
         - name: chatId
@@ -1179,8 +1229,11 @@ paths:
           description: Identifies a button clicked by user. Bot receives this identifier after user pressed button as part of `MessageCallbackUpdate`
           required: true
           in: query
+          # not empty string
           schema:
             type: string
+            minLength: 1
+            pattern: ^(?!\s*$).+
       requestBody:
         required: true
         content:
@@ -1357,11 +1410,16 @@ components:
         is_bot:
           description: '`true` if user is bot'
           type: boolean
+        last_activity_time:
+          description: Time of last user activity in TamTam (Unix timestamp in milliseconds). Can be outdated if user disabled its "online" status in settings
+          type: integer
+          format: int64
       required:
         - user_id
         - name
         - username
         - is_bot
+        - last_activity_time
     UserWithPhoto:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -1501,7 +1559,7 @@ components:
           description: Is current chat publicly available. Always `false` for dialogs
           type: boolean
         link:
-          description: Link on chat if it is public
+          description: Link on chat
           type: string
           readOnly: false
           nullable: true
@@ -1600,6 +1658,7 @@ components:
         - $ref: '#/components/schemas/UserWithPhoto'
         - properties:
             last_access_time:
+              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`) 
               type: integer
               format: int64
             is_owner:
@@ -1805,6 +1864,13 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/Attachment'
+        markup:
+          description: Message text markup. See [Formatting](#section/About/Text-formatting) section for more info 
+          type: array
+          nullable: true
+          readOnly: false
+          items:
+            $ref: '#/components/schemas/MarkupElement'
       required:
         - mid
         - seq
@@ -1821,6 +1887,12 @@ components:
             $ref: '#/components/schemas/Message'
       required:
         - messages
+    TextFormat:
+      description: Message text format
+      type: string
+      enum:
+        - markdown
+        - html
     NewMessageBody:
       properties:
         text:
@@ -1845,10 +1917,44 @@ components:
           type: boolean
           default: true
           readOnly: false
+        format:
+          description: 'If set, message text will be formated according to given markup'
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/TextFormat'
       required:
         - text
         - attachments
         - link
+    ConstructedMessageBody:
+      properties:
+        text:
+          description: Message text
+          type: string
+          maxLength: 4000
+          nullable: true
+          readOnly: false
+        attachments:
+          description: Message attachments. See `AttachmentRequest` and it's inheritors for full information
+          type: array
+          nullable: true
+          readOnly: false
+          items:
+            $ref: '#/components/schemas/AttachmentRequest'
+        markup:
+          description: "Text markup"
+          type: array
+          nullable: true
+          readOnly: false
+          items:
+            $ref: '#/components/schemas/MarkupElement'
+        format:
+          description: 'Message text format. If set, '
+          readOnly: false
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/TextFormat'
     NewMessageLink:
       properties:
         type:
@@ -2154,6 +2260,7 @@ components:
         text:
           description: Visible text of button
           type: string
+          minLength: 1
           maxLength: 128
       discriminator:
         propertyName: type
@@ -2170,8 +2277,7 @@ components:
       description: After pressing this type of button client sends to server payload it contains
       allOf:
         - $ref: '#/components/schemas/Button'
-        - type: object
-          properties:
+        - properties:
             payload:
               description: Button payload
               type: string
@@ -2278,8 +2384,7 @@ components:
     PhotoAttachmentRequest:
       allOf:
         - $ref: '#/components/schemas/AttachmentRequest'
-        - type: object
-          properties:
+        - properties:
             payload:
               allOf:
                 - $ref: '#/components/schemas/PhotoAttachmentRequestPayload'
@@ -2464,6 +2569,93 @@ components:
                 - $ref: '#/components/schemas/ShareAttachmentPayload'
           required:
             - payload
+    MarkupElement:
+      properties:
+        type:
+          description: "Type of the markup element. 
+            Can be **strong**, 
+            *emphasized*, ~strikethrough~, ++underline++, `monospaced`, link or user_mention"
+          type: string
+        from:
+          description: Element start index (zero-based) in text
+          type: integer
+          format: int32
+        length:
+          description: Length of the markup element
+          type: integer
+          format: int32
+      discriminator:
+        propertyName: type
+        mapping:
+          strong: '#/components/schemas/StrongMarkup'
+          emphasized: '#/components/schemas/EmphasizedMarkup'
+          monospaced: '#/components/schemas/MonospacedMarkup'
+          link: '#/components/schemas/LinkMarkup'
+          strikethrough: '#/components/schemas/StrikethroughMarkup'
+          underline: '#/components/schemas/UnderlineMarkup'
+          user_mention: '#/components/schemas/UserMentionMarkup'
+          heading: '#/components/schemas/HeadingMarkup'
+          code: '#/components/schemas/CodeMarkup'
+      required:
+        - type
+        - from
+        - length
+    StrongMarkup:
+      description: Represents **bold** in text 
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    EmphasizedMarkup:
+      description: Represents *italic* in text
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    MonospacedMarkup:
+      description: Represents `monospaced` or ```code``` block in text
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    LinkMarkup:
+      description: Represents link in text 
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+        - properties:
+            url:
+              description: Link's URL
+              type: string
+              minLength: 1
+              maxLength: 2048
+          required:
+            - url
+    StrikethroughMarkup:
+      description: Represents ~strikethrough~ block in text
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    UnderlineMarkup:
+      description: Represents ++underlined++ part of the text
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    HeadingMarkup:
+      description: Represents header part of the text
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+    UserMentionMarkup:
+      description: Represents user mention in text. Mention can be both by user's username or ID if user doesn't have username
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
+        - properties:
+            user_link:
+              description: "`@username` of mentioned user"
+              type: string
+              nullable: true
+              readOnly: false
+            user_id:
+              description: Identifier of mentioned user without username
+              type: integer
+              format: int64
+              nullable: true
+              readOnly: false
+    CodeMarkup:
+      description: Represents a monowidth string of code
+      allOf:
+        - $ref: '#/components/schemas/MarkupElement'
     SubscriptionRequestBody:
       description: Request to set up WebHook subscription
       properties:
@@ -2571,7 +2763,7 @@ components:
           description: Array of prepared messages. This messages will be sent as user taps on "Send" button
           readOnly: false
           items:
-            $ref: '#/components/schemas/NewMessageBody'
+            $ref: '#/components/schemas/ConstructedMessageBody'
         allow_user_input:
           description: 'If `true` user can send any input manually. Otherwise, only keyboard will be shown'
           type: boolean
@@ -2772,9 +2964,13 @@ components:
               description: User who added bot to chat
               allOf:
                 - $ref: '#/components/schemas/User'
+            is_channel:
+              description: Indicates whether bot has been added to channel or not
+              type: boolean
           required:
             - chat_id
             - user
+            - is_channel
     BotRemovedFromChatUpdate:
       description: You will receive this update when bot has been removed from chat
       allOf:
@@ -2788,9 +2984,13 @@ components:
               description: User who removed bot from chat
               allOf:
                 - $ref: '#/components/schemas/User'
+            is_channel:
+              description: Indicates whether bot has been removed from channel or not
+              type: boolean
           required:
             - chat_id
             - user
+            - is_channel
     UserAddedToChatUpdate:
       description: You will receive this update when user has been added to chat where bot is administrator
       allOf:
@@ -2810,9 +3010,13 @@ components:
               format: int64
               readOnly: false
               nullable: true
+            is_channel:
+              description: Indicates whether user has been added to channel or not
+              type: boolean
           required:
             - chat_id
             - user
+            - is_channel
     UserRemovedFromChatUpdate:
       description: You will receive this update when user has been removed from chat where bot is administrator
       allOf:
@@ -2831,9 +3035,13 @@ components:
               type: integer
               format: int64
               readOnly: false
+            is_channel:
+              description: Indicates whether user has been removed from channel or not
+              type: boolean
           required:
             - chat_id
             - user
+            - is_channel
     BotStartedUpdate:
       description: Bot gets this type of update as soon as user pressed `Start` button
       allOf:
@@ -2942,7 +3150,7 @@ components:
               type: array
               nullable: true
               items:
-                $ref: '#/components/schemas/NewMessageBody'
+                $ref: '#/components/schemas/ConstructedMessageBody'
           required:
             - messages
     MessageConstructedUpdate:
