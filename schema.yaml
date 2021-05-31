@@ -1566,7 +1566,6 @@ components:
         description:
           description: Chat description
           type: string
-          readOnly: false
           nullable: true
         dialog_with_user:
           description: Another user in conversation. For `dialog` type chats only
