@@ -224,11 +224,11 @@ info:
     
     `**strong**` or `__strong__` for __bold__ text
     
-    `~strikethough~`  for ~strikethough~ text
+    `~~strikethough~~`  for ~strikethough~ text
     
-    `+underline+`  for <ins>underlined</ins> text
+    `++underline++`  for <ins>underlined</ins> text
     
-    ``` `code` ``` for inline code block
+    ``` `code` ``` for `monospaced` text
 
     ` ```code block``` ` for code block
 
