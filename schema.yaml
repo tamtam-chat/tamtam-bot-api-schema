@@ -250,7 +250,7 @@ info:
     
     Underlined: `<ins>` or `<u>`
     
-    Link: `<a href="https://dev.tamtam.chat">`
+    Link: `<a href="https://dev.tamtam.chat">Docs</a>`
     
     Inline code block: `<code>`
     
