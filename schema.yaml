@@ -215,7 +215,7 @@ info:
     
     To enable text formatting set the `format` property of [NewMessageBody](#tag/new_message_model).
 
-    ### Markdown support
+    ### TamTam flavored Markdown
     To enable [Markdown](https://spec.commonmark.org/0.29/) parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `markdown`.
     
     We currently support only the following syntax:
@@ -227,10 +227,10 @@ info:
     `~~strikethough~~`  for ~strikethough~ text
     
     `++underline++`  for <ins>underlined</ins> text
-    
-    ``` `code` ``` for `monospaced` text
 
-    ` ```code block``` ` for code block
+    ``` `code` ``` or ` ```code``` ` for `monospaced` text
+
+    `^^important^^` for highlighted text (colored in red, by default)
 
     `[Inline URL](https://dev.tamtam.chat/)` for inline URLs
 
@@ -251,10 +251,10 @@ info:
     Underlined: `<ins>` or `<u>`
     
     Link: `<a href="https://dev.tamtam.chat">Docs</a>`
-    
-    Inline code block: `<code>`
-    
-    Code block: `<pre>`
+
+    Monospaced text: `<pre>` or `<code>`
+
+    Highlighted text: `<mark>`
 
     Text formatting is supported for iOS since version 3.1 and Android since 2.20.0.
 
@@ -2594,7 +2594,7 @@ components:
           underline: '#/components/schemas/UnderlineMarkup'
           user_mention: '#/components/schemas/UserMentionMarkup'
           heading: '#/components/schemas/HeadingMarkup'
-          code: '#/components/schemas/CodeMarkup'
+          highlighted: '#/components/schemas/HighlightedMarkup'
       required:
         - type
         - from
@@ -2651,8 +2651,8 @@ components:
               format: int64
               nullable: true
               readOnly: false
-    CodeMarkup:
-      description: Represents a monowidth string of code
+    HighlightedMarkup:
+      description: Represents a highlighted piece of text
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
     SubscriptionRequestBody:
