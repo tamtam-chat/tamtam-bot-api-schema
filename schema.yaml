@@ -236,6 +236,8 @@ info:
 
     `[User mention](tamtam://user/%user_id%)` for user mentions without username
     
+    `# Header` for header
+    
     ### HTML support
     
     To enable HTML parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `html`.
@@ -255,6 +257,8 @@ info:
     Monospaced text: `<pre>` or `<code>`
 
     Highlighted text: `<mark>`
+    
+    Header: `<h1>`
 
     Text formatting is supported for iOS since version 3.1 and Android since 2.20.0.
 
