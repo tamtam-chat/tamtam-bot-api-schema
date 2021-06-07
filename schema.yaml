@@ -228,7 +228,9 @@ info:
     
     `++underline++`  for <ins>underlined</ins> text
 
-    ``` `code` ``` or ` ```code``` ` for `monospaced` text
+    ``` `code` ``` for inline `monospaced` text (line endings inside this block are treated like spaces)
+
+    ` ```code``` ` for `monospaced` text block
 
     `^^important^^` for highlighted text (colored in red, by default)
 
