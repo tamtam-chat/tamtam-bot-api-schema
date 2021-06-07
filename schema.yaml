@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.5.2
+  version: 0.5.3
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -2300,7 +2300,7 @@ components:
         - properties:
             url:
               type: string
-              maxLength: 256
+              maxLength: 2048
           required:
             - url
     RequestContactButton:
