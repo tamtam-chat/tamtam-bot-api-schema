@@ -90,14 +90,15 @@ info:
 
     ### Webhook
     There is some notes about how we handle webhook subscription:
-    1. Sometimes webhook notification cannot be delivered in case when bot server or network is down.
+    - Sometimes webhook notification cannot be delivered in case when bot server or network is down.
 
-      In such case we well retry delivery in a short period of time (from 30 to 60 seconds) and will do this until get
+      In such case we will retry delivery in a short period of time (from 30 to 60 seconds) and will do this until get
       `200 OK` status code from your server, but not longer than **8 hours** (*may change over time*) since update happened.
+      Subscription can be cancelled if bot doesn't response to webhook notification.
 
-      We also consider any non `200`-response from server as failed delivery.
+      We also consider any non `200` response from server as failed delivery.
 
-    2. To protect your bot from unexpected high load we send **no more than 100** notifications per second by default.
+    - To protect your bot from unexpected high load we send **no more than 100** notifications per second by default.
       If you want increase this limit, contact us at [@support](https://tt.me/support).
 
 
@@ -160,7 +161,7 @@ info:
 
     Bot can set title and description of new chat by setting `chat_title` and `chat_description` properties.
 
-    Whereas keyboard can contain several `chat`-buttons there is `uuid` property to distinct them between each other.
+    Whereas keyboard can contain several `chat` buttons there is `uuid` property to distinct them between each other.
     In case you do not pass `uuid` we will generate it. If you edit message, pass `uuid` so we know that this button starts the same chat as before.
 
     Chat button also can contain `start_payload` that will be sent to bot as part of `message_chat_created` update.
@@ -1065,7 +1066,7 @@ paths:
         As the result it will return URL for the next step.
         ```json
         {
-            "url": "http://vu.mycdn.me/upload.do…"
+            "url": "https://vu.mycdn.me/upload.do…"
         }
         ```
 
@@ -1073,7 +1074,7 @@ paths:
         ```shell
         curl -i -X POST
           -H "Content-Type: multipart/form-data"
-          -F "data=@movie.mp4" "http://vu.mycdn.me/upload.do…"
+          -F "data=@movie.mp4" "https://vu.mycdn.me/upload.do…"
         ```
         As the result it will return JSON you can attach to message:
         ```json
@@ -1923,7 +1924,7 @@ components:
           default: true
           readOnly: false
         format:
-          description: 'If set, message text will be formated according to given markup'
+          description: 'If set, message text will be formatted according to given markup'
           readOnly: false
           nullable: true
           allOf:
