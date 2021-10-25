@@ -96,7 +96,7 @@ info:
       `200 OK` status code from your server, but not longer than **8 hours** (*may change over time*) since update happened.
       Subscription can be cancelled if bot doesn't response to webhook notification.
 
-      We also consider any non `200`- response from server as failed delivery.
+      We also consider any non `200` response from server as failed delivery.
 
     - To protect your bot from unexpected high load we send **no more than 100** notifications per second by default.
       If you want increase this limit, contact us at [@support](https://tt.me/support).
@@ -161,7 +161,7 @@ info:
 
     Bot can set title and description of new chat by setting `chat_title` and `chat_description` properties.
 
-    Whereas keyboard can contain several `chat`- buttons there is `uuid` property to distinct them between each other.
+    Whereas keyboard can contain several `chat` buttons there is `uuid` property to distinct them between each other.
     In case you do not pass `uuid` we will generate it. If you edit message, pass `uuid` so we know that this button starts the same chat as before.
 
     Chat button also can contain `start_payload` that will be sent to bot as part of `message_chat_created` update.
