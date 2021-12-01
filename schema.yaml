@@ -771,7 +771,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 100
-            default: '20'
+            default: 20
       responses:
         '200':
           description: Returns members list and pointer to the next data page
