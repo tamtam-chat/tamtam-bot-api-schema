@@ -208,25 +208,25 @@ info:
     with posted message.
 
     Constructors are supported for iOS version 2.7.0 and Android 2.9.0 and higher.
-
+    
     ## Text formatting
-
-    Message text can be improved with basic formatting such as: **strong**, *emphasis*, ~strikethough~,
+    
+    Message text can be improved with basic formatting such as: **strong**, *emphasis*, ~strikethough~, 
     <ins>underline</ins>, `code` or link. You can use either markdown-like or HTML formatting.
-
+    
     To enable text formatting set the `format` property of [NewMessageBody](#tag/new_message_model).
 
     ### TamTam flavored Markdown
     To enable [Markdown](https://spec.commonmark.org/0.29/) parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `markdown`.
-
+    
     We currently support only the following syntax:
 
     `*empasized*` or `_empasized_` for *italic* text
-
+    
     `**strong**` or `__strong__` for __bold__ text
-
+    
     `~~strikethough~~`  for ~strikethough~ text
-
+    
     `++underline++`  for <ins>underlined</ins> text
 
     ``` `code` ``` for inline `monospaced` text (line endings inside this block are treated like spaces)
@@ -238,29 +238,29 @@ info:
     `[Inline URL](https://dev.tamtam.chat/)` for inline URLs
 
     `[User mention](tamtam://user/%user_id%)` for user mentions without username
-
+    
     `# Header` for header
-
+    
     ### HTML support
-
+    
     To enable HTML parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `html`.
-
+     
     Only the following HTML tags are supported. All others will be stripped:
-
+    
     Emphasized: `<i>` or `<em>`
-
+    
     Strong: `<b>` or `<strong>`
-
+    
     Strikethrough: `<del>` or `<s>`
-
+    
     Underlined: `<ins>` or `<u>`
-
+    
     Link: `<a href="https://dev.tamtam.chat">Docs</a>`
 
     Monospaced text: `<pre>` or `<code>`
 
     Highlighted text: `<mark>`
-
+    
     Header: `<h1>`
 
     Text formatting is supported for iOS since version 3.1 and Android since 2.20.0.
@@ -2570,8 +2570,8 @@ components:
     MarkupElement:
       properties:
         type:
-          description: "Type of the markup element.
-            Can be **strong**,
+          description: "Type of the markup element. 
+            Can be **strong**, 
             *emphasized*, ~strikethrough~, ++underline++, `monospaced`, link or user_mention"
           type: string
         from:
