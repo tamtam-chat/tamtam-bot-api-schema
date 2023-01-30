@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.5.4
+  version: 0.5.5
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -208,25 +208,25 @@ info:
     with posted message.
 
     Constructors are supported for iOS version 2.7.0 and Android 2.9.0 and higher.
-    
+
     ## Text formatting
-    
-    Message text can be improved with basic formatting such as: **strong**, *emphasis*, ~strikethough~, 
+
+    Message text can be improved with basic formatting such as: **strong**, *emphasis*, ~strikethough~,
     <ins>underline</ins>, `code` or link. You can use either markdown-like or HTML formatting.
-    
+
     To enable text formatting set the `format` property of [NewMessageBody](#tag/new_message_model).
 
     ### TamTam flavored Markdown
     To enable [Markdown](https://spec.commonmark.org/0.29/) parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `markdown`.
-    
+
     We currently support only the following syntax:
 
     `*empasized*` or `_empasized_` for *italic* text
-    
+
     `**strong**` or `__strong__` for __bold__ text
-    
+
     `~~strikethough~~`  for ~strikethough~ text
-    
+
     `++underline++`  for <ins>underlined</ins> text
 
     ``` `code` ``` for inline `monospaced` text (line endings inside this block are treated like spaces)
@@ -238,29 +238,29 @@ info:
     `[Inline URL](https://dev.tamtam.chat/)` for inline URLs
 
     `[User mention](tamtam://user/%user_id%)` for user mentions without username
-    
+
     `# Header` for header
-    
+
     ### HTML support
-    
+
     To enable HTML parsing, set the `format` property of [NewMessageBody](#tag/new_message_model) to `html`.
-     
+
     Only the following HTML tags are supported. All others will be stripped:
-    
+
     Emphasized: `<i>` or `<em>`
-    
+
     Strong: `<b>` or `<strong>`
-    
+
     Strikethrough: `<del>` or `<s>`
-    
+
     Underlined: `<ins>` or `<u>`
-    
+
     Link: `<a href="https://dev.tamtam.chat">Docs</a>`
 
     Monospaced text: `<pre>` or `<code>`
 
     Highlighted text: `<mark>`
-    
+
     Header: `<h1>`
 
     Text formatting is supported for iOS since version 3.1 and Android since 2.20.0.
@@ -1466,14 +1466,6 @@ components:
           minLength: 1
           readOnly: false
           nullable: true
-        username:
-          description: 'Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: "-" or "_". It **must** starts with a letter'
-          type: string
-          pattern: '[a-zA-Z]+[a-zA-Z0-9-_]*'
-          readOnly: false
-          minLength: 4
-          maxLength: 64
-          nullable: true
         description:
           description: Bot description up to 16k characters long
           type: string
@@ -1664,7 +1656,7 @@ components:
         - $ref: '#/components/schemas/UserWithPhoto'
         - properties:
             last_access_time:
-              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`) 
+              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`)
               type: integer
               format: int64
             is_owner:
@@ -1871,7 +1863,7 @@ components:
           items:
             $ref: '#/components/schemas/Attachment'
         markup:
-          description: Message text markup. See [Formatting](#section/About/Text-formatting) section for more info 
+          description: Message text markup. See [Formatting](#section/About/Text-formatting) section for more info
           type: array
           nullable: true
           readOnly: false
@@ -2578,8 +2570,8 @@ components:
     MarkupElement:
       properties:
         type:
-          description: "Type of the markup element. 
-            Can be **strong**, 
+          description: "Type of the markup element.
+            Can be **strong**,
             *emphasized*, ~strikethrough~, ++underline++, `monospaced`, link or user_mention"
           type: string
         from:
@@ -2607,7 +2599,7 @@ components:
         - from
         - length
     StrongMarkup:
-      description: Represents **bold** in text 
+      description: Represents **bold** in text
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
     EmphasizedMarkup:
@@ -2619,7 +2611,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
     LinkMarkup:
-      description: Represents link in text 
+      description: Represents link in text
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
         - properties:
