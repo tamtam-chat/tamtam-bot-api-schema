@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.5.4
+  version: 0.5.6
   title: TamTam Bot API
   license:
     name: Apache 2.0
@@ -1466,14 +1466,6 @@ components:
           minLength: 1
           readOnly: false
           nullable: true
-        username:
-          description: 'Bot unique identifier. It can be any string 4-64 characters long containing any digit, letter or special symbols: "-" or "_". It **must** starts with a letter'
-          type: string
-          pattern: '[a-zA-Z]+[a-zA-Z0-9-_]*'
-          readOnly: false
-          minLength: 4
-          maxLength: 64
-          nullable: true
         description:
           description: Bot description up to 16k characters long
           type: string
@@ -1664,7 +1656,7 @@ components:
         - $ref: '#/components/schemas/UserWithPhoto'
         - properties:
             last_access_time:
-              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`) 
+              description: User last activity time in chat. Can be outdated for super chats and channels (equals to `join_time`)
               type: integer
               format: int64
             is_owner:
@@ -1871,7 +1863,7 @@ components:
           items:
             $ref: '#/components/schemas/Attachment'
         markup:
-          description: Message text markup. See [Formatting](#section/About/Text-formatting) section for more info 
+          description: Message text markup. See [Formatting](#section/About/Text-formatting) section for more info
           type: array
           nullable: true
           readOnly: false
@@ -2607,7 +2599,7 @@ components:
         - from
         - length
     StrongMarkup:
-      description: Represents **bold** in text 
+      description: Represents **bold** in text
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
     EmphasizedMarkup:
@@ -2619,7 +2611,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
     LinkMarkup:
-      description: Represents link in text 
+      description: Represents link in text
       allOf:
         - $ref: '#/components/schemas/MarkupElement'
         - properties:
